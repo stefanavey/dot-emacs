@@ -199,6 +199,10 @@ Requires a password"
   (advice-add 'turn-on-flyspell   :before-until #'modi/ispell-not-avail-p)
   (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p))
 
+(use-package prettify-symbols-mode
+  ;; Can modify `ess-r-prettify-symbols` to add additional symbols
+  :hook
+  ((prog-mode ess-mode inferior-ess-mode) . prettify-symbols-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous                                                               ;;

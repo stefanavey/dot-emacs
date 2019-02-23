@@ -12,7 +12,7 @@
 ;;;;;;;;;;;;;;;;;
 ;; use-package ;;
 ;;;;;;;;;;;;;;;;;
-package-refresh-contents)
+(package-refresh-contents)
 (dolist (package '(use-package diminish bind-key))
    (unless (package-installed-p package)
      (package-install package)))
@@ -46,10 +46,11 @@ To solve this problem, when your code only knows the relative path of another fi
   (concat (file-name-directory (or load-file-name buffer-file-name)) @file-relative-path)
   )
 
-;; Load plan Emacs settings
-;; NOTE: These should work without installing any extra packages
+;; Load plain Emacs settings
 (load (xah-get-fullpath "spa_vanilla_settings"))
 
+;; Load add-on packages
+(load (xah-get-fullpath "spa_packages"))
 
 ;; Load Custom Functions
 (load (xah-get-fullpath "spa_functions"))
