@@ -11,12 +11,7 @@
 (global-set-key "\C-\M-]" 'indent-region)
 (global-set-key (kbd "C-c m") 'man)
 
-;;;;;;;;;;;
-;; ediff ;;
-;;;;;;;;;;;
-(global-set-key (kbd "C-c C-v") 'ediff-revision)
-
-;; Insert pair of quotes
+;; Insert Pair of quotes
 ;; Use M-1 M-" to wrap current word in quotes
 (global-set-key (kbd "M-\"") 'insert-pair)
 
