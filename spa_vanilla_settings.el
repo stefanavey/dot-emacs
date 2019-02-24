@@ -1,6 +1,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spa_vanilla_settings.el                                                     ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Aesthetics
 (set-face-attribute 'default nil :inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant 'normal :weight 'normal :height 160 :width 'normal :foundry "nil" :family "Hack")
 (set-face-attribute 'secondary-selection nil :background "PaleTurquoise2")
  
@@ -18,24 +20,24 @@
 ;; show row and column in status bar
 (column-number-mode 1)                  
 
-;; abbrev-mode
-(setq abbrev-file-name             ;; tell emacs where to read abbrev
-      "~/.emacs.d/abbrev_defs")    ;; definitions from...
-(setq default-abbrev-mode t)
+(use-package abbrev
+  :defer 5
+  :diminish
+  :config
+  (setq abbrev-file-name "~/.emacs.d/abbrev_defs")
+  (setq default-abbrev-mode t))
 
-;;;;;;;;;;;;;;;
-;; prog-mode ;;
-;;;;;;;;;;;;;;;
-;; highlights keywords in prog-mode
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (font-lock-add-keywords nil
-                                    '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
+(use-package prog-mode
+  :after (auto-complete)
+  :config
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (font-lock-add-keywords nil
+                                      '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
 
-;; Turn on string inflection cycling in programming modes
-(add-hook 'prog-mode-hook
-          '(lambda ()
-             (local-set-key (kbd "C-c C-u") 'string-inflection-cycle)))
+  (add-hook 'prog-mode-hook
+            '(lambda ()
+               (local-set-key (kbd "C-c C-u") 'string-inflection-cycle))))
 
 (use-package dired
   :diminish dired-omit-mode
@@ -126,7 +128,7 @@ Source: `http://stackoverflow.com/questions/15038277/find-and-replace-without-re
   
 (use-package auto-revert
   :no-require t
-  :hook (dired-mode . auto-revert-mode)
+  :hook ((dired-mode doc-view-mode) . auto-revert-mode)
   :config
   (setq auto-revert-verbose nil))
   
@@ -139,7 +141,7 @@ Source: `http://stackoverflow.com/questions/15038277/find-and-replace-without-re
   (winner-mode 1))
 
 (use-package ediff
-  :init
+  :config
   (setq ediff-split-window-function 'split-window-horizontally)
   :bind (("C-c C-v" . ediff-revision)))
 
@@ -183,6 +185,7 @@ Requires a password"
 
 (use-package flyspell
   :diminish (flyspell-mode . "φ")
+  :after auto-complete
   :preface
   ;; Flyspell signals an error if there is no spell-checking tool is
   ;; installed. We can advice `turn-on-flyspell' and `flyspell-prog-mode'
@@ -194,8 +197,7 @@ Requires a password"
   ((text-mode org-mode) . turn-on-flyspell)
   ((prog-mode) . flyspell-prog-mode)
   :config
-  (with-eval-after-load 'auto-complete
-    (ac-flyspell-workaround))
+  (ac-flyspell-workaround)
   (advice-add 'turn-on-flyspell   :before-until #'modi/ispell-not-avail-p)
   (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p))
 
@@ -203,6 +205,25 @@ Requires a password"
   ;; Can modify `ess-r-prettify-symbols` to add additional symbols
   :hook
   ((prog-mode ess-mode inferior-ess-mode) . prettify-symbols-mode))
+
+(use-package calendar
+  :init
+  (setq calendar-latitude 40.231846)
+  (setq calendar-longitude -75.252461)
+  (setq calendar-location-name "North Wales, PA")
+  (setq calendar-time-zone -300)
+  (setq calendar-standard-time-zone-name "EST")
+  (setq calendar-daylight-time-zone-name "EDT"))
+
+(use-package auto-complete
+  :defer 15
+  :preface
+  (defun my-auto-hook ()
+    (auto-complete-mode 1)
+    (define-key ac-completing-map [return] nil)
+    (define-key ac-completing-map "\r" nil))
+  :hook
+  ((prog-mode ess-mode inferior-ess-mode) . (my-auto-hook)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous                                                               ;;

@@ -2,9 +2,55 @@
 ;; spa_packages.el                                                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;
+;; Libraries ;;
+;;;;;;;;;;;;;;;
+
+(use-package f
+  :ensure t
+  :defer t)
+
+(use-package s
+  :ensure t
+  :defer t)
+
+;;;;;;;;;;;;;;;;
+;; Aesthetics ;;
+;;;;;;;;;;;;;;;;
+;; Turn minor mode "default text scale" on in order to globally adjust text size
+;; with C-M-= and C-M--
+(use-package default-text-scale
+  :ensure t
+  :config (default-text-scale-mode t))
+
+(use-package smart-mode-line
+  :ensure t
+  :init (add-hook 'after-init-hook 'sml/setup)
+  :config
+  (setq sml/theme 'respectful)
+  (setq sml/modified-char "m")
+  (add-to-list 'sml/replacer-regexp-list '("^~/Box Sync/" ":Box:") t))
+
+(use-package color-theme-sanityinc-solarized
+  :ensure t
+  :after (smart-mode-line)
+  :init
+  (setq custom-safe-themes t) ;; treat all themes as safe
+  :config
+  (color-theme-sanityinc-solarized--define-theme light)
+  (load-theme 'smart-mode-line-respectful))
+
+(use-package emojify
+  :ensure t
+  :defer 15
+  :hook ((text-mode org-mode) . global-emojify-mode)
+  :config
+  (setq emojify-program-contexts '(comments))
+  :bind ("C-c E" . emojify-insert-emoji))
+
 ;; dired-x is not available?
 (use-package dired-x
-  :disabled
+  :disabled t
   :ensure t
   :after dired)
 
@@ -119,9 +165,9 @@
   (add-hook 'csv-mode-hook
 	    (lambda () (csv-align-fields nil (point-min) (point-max)))))
 
-(use-package org-mode
+(use-package org
   :preface
-(defun spa/mtime (f) (let ((attrs (file-attributes f))) (nth 5 attrs)))
+  (defun spa/mtime (f) (let ((attrs (file-attributes f))) (nth 5 attrs)))
   (defun spa/latest-file (path)
     "Get latest file (including directory) in PATH."    
   (let ((e (f-entries path)))
@@ -305,16 +351,177 @@
   :bind
   ("C-c C-g" . google-this))
 
+;; volatile highlights - temporarily highlight changes from pasting etc
+(use-package volatile-highlights
+  :ensure t
+  :diminish volatile-highlights-mode
+  :config
+  (volatile-highlights-mode t))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Programming                                                                 ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package osx-dictionary
+  :ensure t
+  :bind
+  ("C-c d" . osx-dictionary-search-word-at-point))
 
-(use-package ein
+(use-package smartscan
+  :ensure t
+  :config
+  (global-smartscan-mode 1)
+  :bind (("M-<down>" . smartscan-symbol-go-forward)
+	 ("M-<up>" . smartscan-symbol-go-backward)))
+
+(use-package openwith
+  :disabled t
+  :ensure t
+  :config (openwith-mode t))
+
+(use-package doc-view
+  :ensure t
+  :defer t
+  :init (add-to-list 'auto-mode-alist '("\\.pdf\\'" . doc-view-mode-maybe))
+  :config
+  (setq doc-view-continuous t))
+
+(use-package smex
+  :ensure t
+  :config
+  (defadvice smex (around space-inserts-hyphen activate compile)
+    (let ((ido-cannot-complete-command
+	   `(lambda ()
+	      (interactive)
+	      (if (string= " " (this-command-keys))
+		  (insert ?-)
+		(funcall ,ido-cannot-complete-command)))))
+      ad-do-it))
+  :bind (("M-x" . smex)
+	 ("M-X" . smex-major-mode-commands)
+	 ("C-c C-c M-x" . execute-extended-command)))
+
+(use-package writegood-mode
   :ensure t)
 
 (use-package pdf-tools
   :ensure t
   :config
   (pdf-tools-install))
+
+;;;;;;;;;;;;;;;;;
+;; Programming ;;
+;;;;;;;;;;;;;;;;;
+(use-package ein
+  :ensure t)
+
+(use-package matlab-mode
+  :ensure t
+  :mode ("\\.m$" . matlab-mode)
+  :preface
+  (defun spa/matlab-insert-assign ()
+    "Insert asignment operator for Matlab"
+    (interactive)
+    (just-one-space)
+    (insert "=")
+    (just-one-space))
+  :config
+  (load-library "matlab-load")
+  (setq matlab-shell-command-switches '("-nosplash" "-nodesktop"))
+  (setq matlab-indent-level 4)
+;; (matlab-cedet-setup)
+;; (setq mlint-programs (quote ("/Applications/MATLAB_R2018b.app/bin/maci64/mlint")))
+;; (add-hook 'matlab-mode-hook (lambda () (mlint-minor-mode 1)))
+;; (setq matlab-show-mlint-warnings t)
+;; (setq matlab-highlight-cross-function-variables t)
+  (add-hook 'matlab-mode-hook #'my-auto-hook)
+   :bind (:map matlab-mode-map
+               ("M--" . spa/matlab-insert-assign))) 
+;; TODO: Does load but does NOT put function in Matlab mode map or set command switches as expected
+
+(use-package ess
+  :ensure t
+  :init (require 'ess-site)
+  :config
+  ;; Don't ask me for a directory on startup
+  (setq ess-ask-for-ess-directory nil)
+  ;; Use ido mode for ESS
+  (setq ess-use-ido t)
+  ;; Would like to use flymake but it's not currently working
+  (setq ess-use-flymake nil)
+  ;; (setq ess-help-own-frame t)
+  (setq ess-ask-about-transfile nil)
+  ;; (setq inferior-ess-own-frame t) ; for 'dedicated' *R* buffers
+  (setq inferior-R-args "--no-save") ; default is don't ask to save workspace
+  (setq-default ess-dialect "R")
+  (setq comint-scroll-to-bottom-on-input t)
+  (setq comint-scroll-to-bottom-on-output t)
+  (setq comint-move-point-for-output t)
+
+  ;; ElDoc
+  ;; This seemed to slow things down too much so disabled
+  (setq ess-eldoc-show-on-symbol nil) ; shows function arguments even if not in ()
   
+
+  (setq ess-plain-first-buffername nil)
+
+  (setq ess-tab-complete-in-script t)
+
+  ;; Modify the indentation style so that continued statements
+  ;; like piping and adding operations only indent the first line
+  ;; (add-to-list 'ess-style-alist
+  ;;              '(my-style
+  ;;                (ess-indent-level . 2)
+  ;;                (ess-first-continued-statement-offset . 2)
+  ;;                (ess-continued-statement-offset . 0)
+  ;;                (ess-brace-offset . -4)
+  ;;                (ess-expression-offset . 4)
+  ;;                (ess-else-offset . 0)
+  ;;                (ess-close-brace-offset . 0)
+  ;;                (ess-brace-imaginary-offset . 0)
+  ;;                (ess-continued-brace-offset . 0)
+  ;;                (ess-arg-function-offset . 4)
+  ;;                (ess-arg-function-offset-new-line . '(4))
+  ;;                ))
+  ;; (setq ess-default-style 'my-style)
+  ;; Agressive indentations in ESS mode
+  ;; (add-hook 'ess-mode-hook #'aggressive-indent-mode)
+  ;; ;; For not substituting '_' with '->'
+;;; ESS Roxygen customization to place nice with my function templates
+  (setq ess-roxy-template-alist
+	(list '("param" . "")
+	      '("return" . "")))
+  ;; Tried to fix e-mail address because @ gets parsed incorrectly
+  ;; and it should be '@@' but too much work and it didn't work
+  ;; (defun spa/fix-mail-address ()
+  ;;   (save-excursion
+  ;;     (while (search-backward "savey@its.jnj.com" nil t)
+  ;;       (replace-match "savey@@its.jnj.com"))))
+  ;; (add-hook 'ess-roxy-update-entry 'spa/fix-mail-address)
+  ;; Set the font lock keywords to maximize font locking in ESS
+  (setq ess-R-font-lock-keywords
+	(quote
+	 ((ess-R-fl-keyword:modifiers . t)
+	  (ess-R-fl-keyword:fun-defs . t)
+	  (ess-R-fl-keyword:keywords . t)
+	  (ess-R-fl-keyword:bare-keywords . t)
+	  (ess-R-fl-keyword:control-flow-keywords . t)
+	  (ess-R-fl-keyword:signal-keywords . t)
+	  (ess-R-fl-keyword:assign-ops . t)
+	  (ess-R-fl-keyword:constants . t)
+	  (ess-fl-keyword:fun-calls)
+	  (ess-fl-keyword:numbers . t)
+	  (ess-fl-keyword:operators . t)
+	  (ess-fl-keyword:delimiters . t)
+	  (ess-fl-keyword:= . t)
+	  (ess-R-fl-keyword:F&T . t))))  
+  :bind (:map ess-mode-map
+	      ("<backtab>" . ess-complete-object-name)
+	      ("C-c M-c" . ess-eval-paragraph-and-go))
+  :bind (:map inferior-ess-mode-map
+	      ("M-r" . comint-history-isearch-backward)
+	      ("C-u M-r" . comint-history-isearch-backward-regexp)))
+
+;; (use-package ess-edit)
+;; (load (xah-get-fullpath "lisp/ess-R-object-popup"))
+;; Issue 8 version
+(load (xah-get-fullpath "lisp/ess-view.el"))
+(setq ess-view--spreadsheet-program "open")
+
+
