@@ -4,9 +4,9 @@ My Emacs configuration files.  I created this repos to organize my > 2,000 line 
 
 ## How to Test
 
-You can test out this configuration without modifying your own init file by using the command below.
+You can test out this configuration without modifying your own settings by following the steps below. **NOTE:** To be safe, you should make a copy of your `~/.emacs.d` before running the command below as additional packages or different packages versions may be installed in `~/.emacs.d/elpa`.
 
-To just test out Emacs with this config, you can run Emacs with the `-q` flag and than specify `-l` to load the file `spa_emacs_init.el`.
+To just test out Emacs with this config, you can run Emacs with the `-q` flag (don't load init file) and than specify `-l` (load lisp code) to load the file `spa_emacs_init.el`.
 
 ``` shell
 
