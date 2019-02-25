@@ -14,6 +14,9 @@
   :ensure t
   :defer t)
 
+(use-package cl)
+(use-package color)
+
 ;;;;;;;;;;;;;;;;
 ;; Aesthetics ;;
 ;;;;;;;;;;;;;;;;
@@ -54,8 +57,25 @@
   :ensure t
   :after dired)
 
-(use-package color)
-(use-package cl)
+(use-package dired-du
+  :ensure t
+  :defer t
+  :config
+  (setq dired-du-size-format t)
+  (setq dired-du-update-headers t))
+
+(use-package dired+
+  :disabled t
+  :load-path
+  (lambda () (xah-get-fullpath "lisp/dired+.el"))
+  :config
+  (setq diredp-hide-details-initially-flag nil))
+(load-file (xah-get-fullpath "lisp/dired+.el"))
+(setq diredp-hide-details-initially-flag nil)
+
+;; (use-package dired-quick-sort
+;;   :config
+;;   (dired-quick-sort-setup))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -317,8 +337,7 @@
   (org-mode . visual-line-mode)
   (org-agenda-mode . hl-line-mode)
   :bind (:map global-map
-	      ("C-c a" . org-agenda)
-	      )
+	      ("C-c a" . org-agenda))
   (:map org-mode-map
 	;; ("C-c b" . org-iswitchb)	; now using ido-mode for buffer switching
 	("C-c l" . org-store-link)
@@ -378,7 +397,7 @@
 (use-package doc-view
   :ensure t
   :defer t
-  :init (add-to-list 'auto-mode-alist '("\\.pdf\\'" . doc-view-mode-maybe))
+  :mode ("\\.pdf\\'" . doc-view-mode-maybe)
   :config
   (setq doc-view-continuous t))
 
@@ -405,6 +424,91 @@
   :config
   (pdf-tools-install))
 
+(use-package which-key
+  :ensure t
+  :defer 5
+  :diminish
+  :commands which-key-mode
+  :config
+  (which-key-mode)
+  :bind (:map global-map
+	      ("C-h z" . which-key-show-major-mode)))
+
+(use-package goto-chg
+  :ensure t
+  :bind
+  ("C-c l" . goto-last-change))
+
+(use-package ivy
+  :ensure t
+  :diminish
+  :preface
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-initial-inputs-alist nil)  
+  (setq ivy-count-format "(%d/%d) ")
+  (add-to-list 'ivy-ignore-buffers "\\[r\\]")
+  (add-to-list 'ivy-ignore-buffers "\\[poly-head-tail\\]")
+  (add-to-list 'ivy-ignore-buffers "\\[yaml\\]")
+  (add-to-list 'ivy-ignore-buffers "\\[latex\\]")
+  (add-to-list 'ivy-ignore-buffers "\\[fallback\\]")
+  (add-to-list 'ivy-ignore-buffers "\\[sas\\]")
+  :bind
+  ("C-x b" . ivy-switch-buffer))
+
+(use-package counsel
+  :ensure t
+  :after ivy
+  :diminish
+  :preface
+  (defun ivy--cd-onedrive ()
+    (interactive)
+    (ivy--cd "~/OneDrive - JnJ/"))
+  (defun ivy--cd-ta ()
+    (interactive)
+    (ivy--cd "~/OneDrive - JnJ/Documents/TA"))
+  (defun ivy--cd-repos ()
+    (interactive)
+    (ivy--cd "~/repos/"))
+  :config
+  (define-key counsel-find-file-map (kbd "M-d") 'ivy--cd-onedrive)
+  (define-key counsel-find-file-map (kbd "M-a") 'ivy--cd-ta)
+  (define-key counsel-find-file-map (kbd "M-r") 'ivy--cd-repos)
+  :bind
+  ("M-x" . counsel-M-x)
+  ("C-x C-f" . counsel-find-file)
+  ("C-c g" . counsel-git)
+  ("C-c r" . counsel-minibuffer-history))
+
+;; TODO: Update refcard with this bit of C-o doing swiper from regular isearch
+(use-package swiper
+  :ensure t
+  :after ivy
+  :bind (:map isearch-mode-map
+	      ("C-o" . swiper-from-isearch)))
+
+(use-package counsel-projectile
+  :ensure t
+  :after (counsel projectile)
+  :config
+  (counsel-projectile-mode 1))
+
+(use-package projectile
+  :defer 5
+  :config
+  (projectile-mode))
+
+(use-package avy
+  :ensure t
+  :config
+  (avy-setup-default)
+  :bind
+  ("M-g M-c" . avy-goto-char-2)
+  ("M-g M-g" . avy-goto-line))
+
+
+  
 ;;;;;;;;;;;;;;;;;
 ;; Programming ;;
 ;;;;;;;;;;;;;;;;;
@@ -438,7 +542,43 @@
 (use-package ess
   :ensure t
   :init (require 'ess-site)
+  :preface
+  (defun spa/ess-insert-pipe (arg)
+    "Insert pipe '%>%' operator, add a newline and indent. With prefix arg, don't add newline" 
+    (interactive "P")
+    (if arg
+	(progn
+	  (just-one-space)
+	  (insert "%>%")
+	  )
+      (progn
+	(just-one-space)
+	(insert "%>%")
+	(ess-newline-and-indent))))
+  (defun spa/ess-insert-assign ()
+    "Insert asignment operator for R"
+    (interactive)
+    (just-one-space)
+    (insert "<-")
+    (just-one-space))
+  ;; TODO: Improve this by determining source of error messages
+  ;; and automatically linking scratch R buffer to process
+  (defun spa/R-scratch ()
+    "Bring up a 'scratch' R script and console for quick calculations."
+    (interactive)
+    (delete-other-windows)
+    (setq new-buf (get-buffer-create "scratch.R"))
+    (switch-to-buffer new-buf)
+    (R-mode)
+    (setq w1 (selected-window))
+    (setq w1name (buffer-name))
+    (setq w2 (split-window w1 nil t))
+    (if (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
+	(R))
+    (set-window-buffer w2 "*R*")
+    (set-window-buffer w1 w1name))
   :config
+  (setq ess-smart-S-assign-key nil)
   ;; Don't ask me for a directory on startup
   (setq ess-ask-for-ess-directory nil)
   ;; Use ido mode for ESS
@@ -453,16 +593,11 @@
   (setq comint-scroll-to-bottom-on-input t)
   (setq comint-scroll-to-bottom-on-output t)
   (setq comint-move-point-for-output t)
-
   ;; ElDoc
   ;; This seemed to slow things down too much so disabled
   (setq ess-eldoc-show-on-symbol nil) ; shows function arguments even if not in ()
-  
-
   (setq ess-plain-first-buffername nil)
-
   (setq ess-tab-complete-in-script t)
-
   ;; Modify the indentation style so that continued statements
   ;; like piping and adding operations only indent the first line
   ;; (add-to-list 'ess-style-alist
@@ -510,13 +645,43 @@
 	  (ess-fl-keyword:operators . t)
 	  (ess-fl-keyword:delimiters . t)
 	  (ess-fl-keyword:= . t)
-	  (ess-R-fl-keyword:F&T . t))))  
+	  (ess-R-fl-keyword:F&T . t))))
+  ;; Toggle camel case / underscore / etc.
+  (add-hook 'inferior-ess-mode-hook
+            '(lambda ()
+               (local-set-key (kbd "C-c C-u") 'string-inflection-cycle)))
+  (add-hook 'ess-mode-hook
+            '(lambda ()
+               (local-set-key (kbd "C-c C-u") 'string-inflection-cycle)))
+  ;; Unbind ess-display-help-on-object from C-c C-v since it's on multiple keys
+  (add-hook 'ess-mode-hook
+            '(lambda ()
+               (local-unset-key (kbd "C-c C-v"))))
+  ;; Get proper R program depending on local vs. server
+  (add-hook 'ess-mode-hook
+            '(lambda ()
+	       ;; returns non-nil if buffer is under tramp connection (remote)
+	       (if (file-remote-p default-directory)
+		   (setq inferior-ess-r-program "/usr/bin/R")
+		 (setq inferior-ess-r-program "/usr/local/bin/R"))))
+  (add-hook 'inferior-ess-mode-hook
+            '(lambda ()
+	       ;; returns non-nil if buffer is under tramp connection (remote)
+	       (if (file-remote-p default-directory)
+		   (setq inferior-ess-r-program "/usr/bin/R")
+		 (setq inferior-ess-r-program "/usr/local/bin/R"))))
   :bind (:map ess-mode-map
 	      ("<backtab>" . ess-complete-object-name)
-	      ("C-c M-c" . ess-eval-paragraph-and-go))
+	      ("C-c M-c" . ess-eval-paragraph-and-go)
+	      ("M-=" . spa/ess-insert-pipe)
+	      ("M--" . spa/ess-insert-assign))
   :bind (:map inferior-ess-mode-map
 	      ("M-r" . comint-history-isearch-backward)
-	      ("C-u M-r" . comint-history-isearch-backward-regexp)))
+	      ("C-u M-r" . comint-history-isearch-backward-regexp)
+	      ("M-=" . spa/ess-insert-pipe)
+  	      ("M--" . spa/ess-insert-assign))
+  :bind (:map global-map
+	      ("C-x 9" . spa/R-scratch)))
 
 ;; (use-package ess-edit)
 ;; (load (xah-get-fullpath "lisp/ess-R-object-popup"))
@@ -525,3 +690,121 @@
 (setq ess-view--spreadsheet-program "open")
 
 
+(use-package poly-markdown
+  :ensure t)
+
+(use-package poly-R
+  :ensure t)
+
+(use-package poly-noweb
+  :ensure t)
+
+(use-package polymode
+  :ensure t
+  :after (poly-markdown poly-R poly-noweb)
+  :init
+  (require 'polymode-core)
+  :mode
+  ("\\.Rmd" . poly-markdown+r-mode)
+  :preface
+  (defvar pm/chunkmode)
+  (defvar rmd-render-history nil "History list for spa/rmd-render.")
+  (declare-function pm-map-over-spans "polymode-core")
+  (declare-function pm-narrow-to-span "polymode-core")
+  (defun spa/rmd-render (arg)
+    "Render the current Rmd file to PDF output. 
+   With a prefix arg, edit the R command in the minibuffer" 
+    (interactive "P")
+    ;; Build the default R render command
+    (setq rcmd (concat "rmarkdown::render('" buffer-file-name "',"
+		       "output_dir = '../reports',"
+		       "output_format = 'html_document')"))
+    ;; Check for prefix argument
+    (if arg
+	(progn
+	  ;; Use last command as the default (if non-nil) 
+	  (setq prev-history (car rmd-render-history))
+	  (if prev-history
+	      (setq rcmd prev-history)
+	    nil)
+	  ;; Allow the user to modify rcmd 
+	  (setq rcmd
+		(read-from-minibuffer "Run: " rcmd nil nil 'rmd-render-history))
+	  )
+      ;; With no prefix arg, add default rcmd to history
+      (setq rmd-render-history (add-to-history 'rmd-render-history rcmd)))
+    ;; Build and evaluate the shell command
+    (setq command (concat "echo \"" rcmd "\" | R --vanilla"))
+    (compile command))
+  ;; TODO: Debug this for edge cases. Usually this works ok
+  (defun spa/rmd-run ()
+    "Start a Shiny server for the given R markdown document, 
+   and render it for display."
+    (interactive)
+    (save-excursion
+      (setq orig-buffer (buffer-name))
+      ;; Build the R run command
+      (setq rcmd (concat "rmarkdown::run('" buffer-file-name "')"))
+      ;; Change buffer name to [r] buffer associated with ESS process
+      (if (string-match-p "\[r\]" orig-buffer)
+	  (setq r-buf-name orig-buffer)
+	(setq r-buf-name (concat orig-buffer "[r]")))
+      (switch-to-buffer r-buf-name)
+      ;; Send the R command to the R process
+      (setq process (ess-get-process))
+      ;; Interrupt current R process
+      (switch-to-buffer (process-buffer process))
+      (interrupt-process)
+      (switch-to-buffer orig-buffer)
+      (ess-send-string process rcmd t)))
+  (defun spa/rmd-send-chunk ()
+    "Send current R chunk to ess process."
+    (interactive)
+    (and (eq (oref pm/chunkmode :mode) 'r-mode) ;;'
+	 (pm-with-narrowed-to-span nil
+           (goto-char (point-min))
+           (forward-line)
+           (ess-eval-region (point) (point-max) nil nil 'R)))) ;;'
+  (defun spa/rmd-send-chunk-and-step ()
+    "Send current R chunk to ess process and advance to next chunk."
+    (interactive)
+    (and (eq (oref pm/chunkmode :mode) 'r-mode) ;;'
+	 (ess-eval-buffer 'R)
+	 (search-forward "```")
+	 (search-forward "```")
+	 (forward-line)))
+  ;; TODO: Debug this
+  (defun spa/rmd-send-buffer (arg)
+    "Send all R code blocks in buffer to ess process. With prefix
+Send regions above point."
+    (interactive "P")
+    (save-restriction
+      (widen)
+      (save-excursion
+	(pm-map-over-spans
+	 'spa/rmd-send-chunk (point-min) ;;'
+	 ;; adjust this point to send prior regions
+	 (if arg (point) (point-max))))))
+  (defun spa/insert-r-code-chunk (arg)
+    "Insert R Markdown code chunk. With prefix arg, read in chunk header contents"
+    (interactive "P")
+    (if arg
+	(progn
+	  (setq contents (read-from-minibuffer "Chunk Header: " nil nil nil))
+	  (setq str (concatenate 'string  "```{" contents "}\n"))
+	  (insert str)
+	  )
+      (progn
+	(insert "```{r}\n")))
+    (insert "\n")
+    (save-excursion
+      (insert "\n")
+      (insert "\n")
+      (insert "```\n")))
+  :config
+  (define-key poly-markdown+R-mode-map (kbd "C-c C-f")  'spa/rmd-send-chunk-and-step)
+  (define-key poly-markdown+R-mode-map (kbd "C-c C-b")  'spa/rmd-send-buffer)
+  (define-key markdown-mode-map (kbd "C-c C-a c") 'spa/insert-r-code-chunk)
+  :bind (:map polymode-minor-mode-map
+	      ("C-c r" . spa/rmd-render)
+	      ("C-c s" . spa/rmd-run)))
