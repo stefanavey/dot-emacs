@@ -18,7 +18,18 @@
 
 ;; column-number-mode
 ;; show row and column in status bar
-(column-number-mode 1)                  
+(column-number-mode 1)
+
+(use-package ls-lisp
+  :init
+  (setq ls-lisp-use-insert-directory-program nil))
+
+;; Add another prompt format to prevent entering passwords in plain text
+(use-package comint
+  :config
+  (setq comint-password-prompt-regexp
+	(concat comint-password-prompt-regexp
+		"\\|^Password for .*:\\s *\\'")))
 
 (use-package abbrev
   :defer 5
@@ -128,6 +139,7 @@ Source: `http://stackoverflow.com/questions/15038277/find-and-replace-without-re
   
 (use-package auto-revert
   :no-require t
+  :diminish
   :hook ((dired-mode doc-view-mode) . auto-revert-mode)
   :config
   (setq auto-revert-verbose nil))
@@ -217,6 +229,7 @@ Requires a password"
 
 (use-package auto-complete
   :defer 15
+  :diminish
   :preface
   (defun my-auto-hook ()
     (auto-complete-mode 1)
@@ -227,8 +240,68 @@ Requires a password"
 
 ;; TODO: This isn't getting turned on in ESS modes
 (use-package subword-mode
+  :diminish
   :hook
   ((ess-mode-hook inferior-ess-mode-hook) . subword-mode))
+
+(use-package ibuffer
+  :ensure t
+  :init
+  (setq ibuffer-expert t)
+  (setq ibuffer-show-empty-filter-groups nil)
+  (setq ibuffer-saved-filter-groups
+	'(("work"
+	   ("emacs-config" (or (filename . ".emacs.d")
+			       (filename . ".emacs")))
+           ("R Code" (or (name . "\\.R$")
+			 (name . "\\.Rmd$")))
+           ("Python Code" (name . "\\.py$"))
+           ("Julia Code" (name . "\\.jl$"))
+	   ("Process" (or (mode . inferior-ess-mode)
+			  (mode . inferior-python-mode)
+			  (mode . shell-mode)
+			  (mode . term-mode)))
+	   ("Org" (mode . org-mode))
+           ("Dired" (mode . dired-mode))
+	   ("Magit" (name . "\*magit"))
+	   ("Help" (or (name . "\*Help\*")
+		       (name . "\*Apropos\*")
+		       (name . "\*info\*"))))))
+  :preface
+  (defun spa/ibuffer-vc-or-projectile-filter-groups (arg)
+    "ibuffer Filter by VC Repos or Projectile
+
+'/ V' to view by version control git repositories
+'C-u / V' to view by projectile projects"
+    (interactive "P")
+    (setq ibuffer-formats
+	  '((mark modified read-only vc-status-mini " "
+		  (name 18 18 :left :elide)
+		  " "
+		  (size 9 -1 :right)
+		  " "
+		  (mode 16 16 :left :elide)
+		  " "
+		  (vc-status 16 16 :left)
+		  " "
+		  filename-and-process)))
+    (if arg
+	(ibuffer-projectile-set-filter-groups)
+      (ibuffer-vc-set-filter-groups-by-vc-root))
+    (unless (eq ibuffer-sorting-mode 'alphabetic)
+      (ibuffer-do-sort-by-alphabetic))
+    (ibuffer-filter-by-filename ".*[.].*")
+    )  
+  :config
+  (add-hook 'ibuffer-mode-hook
+	    '(lambda ()
+	       (ibuffer-auto-mode 1)	     
+	       (ibuffer-switch-to-saved-filter-groups "work")))
+  
+  :bind (:map global-map
+	      ("C-x C-b" . ibuffer))
+  :bind (:map ibuffer-mode-map
+              ("/ V" . spa/ibuffer-vc-or-projectile-filter-groups)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous                                                               ;;
@@ -285,3 +358,5 @@ Requires a password"
 (setq compilation-scroll-output 'first-error)
 
 (setq trash-directory "~/.Trash")
+
+(setq sentence-end-double-space nil)

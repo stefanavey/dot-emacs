@@ -17,6 +17,17 @@
 (use-package cl)
 (use-package color)
 
+;;;;;;;;;;;;;;;
+;; Utilities ;;
+;;;;;;;;;;;;;;;
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-copy-env "BOX_FOLDER")
+  (exec-path-from-shell-copy-env "SIGNATURES_BOX")
+  (exec-path-from-shell-initialize)
+)
+
 ;;;;;;;;;;;;;;;;
 ;; Aesthetics ;;
 ;;;;;;;;;;;;;;;;
@@ -69,7 +80,8 @@
   :load-path
   (lambda () (xah-get-fullpath "lisp/dired+.el"))
   :config
-  (setq diredp-hide-details-initially-flag nil))
+  (setq diredp-hide-details-initially-flag nil)
+  (set-face-attribute 'diredp-dir-name nil :foreground "DarkRed"))
 (load-file (xah-get-fullpath "lisp/dired+.el"))
 (setq diredp-hide-details-initially-flag nil)
 
@@ -81,54 +93,70 @@
   :ensure t
   :after (color cl)
   :preface
-  ;; Better rainbow colors (source: https://emacs.stackexchange.com/questions/21303/looking-for-a-better-way-of-tweaking-rainbow-delimiters)
   (defun hsl-to-hex (h s l)
-  "Convert H S L to hex colours."
-  (let (rgb)
-    (setq rgb (color-hsl-to-rgb h s l))
-    (color-rgb-to-hex (nth 0 rgb)
-                      (nth 1 rgb)
-                      (nth 2 rgb))))
+    "Convert H S L to hex colours"
+    (let (rgb)
+      (setq rgb (color-hsl-to-rgb h s l))
+      (color-rgb-to-hex (nth 0 rgb)
+			(nth 1 rgb)
+			(nth 2 rgb))))
   (defun bracket-colors ()
-  "Calculate the bracket colours based on background."
-  (let (hexcolors lightvals)
-    (if (>= (color-distance  "white"
-                             (face-attribute 'default :background))
-            (color-distance  "black"
-                             (face-attribute 'default :background)))
-        (setq lightvals (list 0.65 0.55))
-      (setq lightvals (list 0.35 0.30)))
-
-    (concatenate 'list
-                 (dolist (n'(.71 .3 .11 .01))
-                   (push (hsl-to-hex (+ n 0.0) 1.0 (nth 0 lightvals)) hexcolors))
-                 (dolist (n '(.81 .49 .17 .05))
-                   (push (hsl-to-hex (+ n 0.0) 1.0 (nth 1 lightvals)) hexcolors)))
-    (reverse hexcolors)))
-  (defun colorise-brackets ()
-  "Apply my own colours to rainbow delimiters."
-  (interactive)
-  (require 'rainbow-delimiters)
-  (custom-set-faces
-   ;; or use (list-colors-display)
-   `(rainbow-delimiters-depth-1-face ((t (:foreground "#888"))))
-   `(rainbow-delimiters-depth-2-face ((t (:foreground ,(nth 0 (bracket-colors))))))
-   `(rainbow-delimiters-depth-3-face ((t (:foreground ,(nth 1 (bracket-colors))))))
-   `(rainbow-delimiters-depth-4-face ((t (:foreground ,(nth 2 (bracket-colors))))))
-   `(rainbow-delimiters-depth-5-face ((t (:foreground ,(nth 3 (bracket-colors))))))
-   `(rainbow-delimiters-depth-6-face ((t (:foreground ,(nth 4 (bracket-colors))))))
-   `(rainbow-delimiters-depth-7-face ((t (:foreground ,(nth 5 (bracket-colors))))))
-   `(rainbow-delimiters-depth-8-face ((t (:foreground ,(nth 6 (bracket-colors))))))
-   `(rainbow-delimiters-depth-9-face ((t (:foreground ,(nth 7 (bracket-colors))))))
-   `(rainbow-delimiters-unmatched-face ((t (:foreground "white" :background "red"))))
-   ))
+    "Calculate the bracket colours based on background.
+Used for better rainbow colors than default.
+source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-way-of-tweaking-rainbow-delimiters'"
+    (let (hexcolors lightvals)
+      (if (>= (color-distance  "white"
+                               (face-attribute 'default :background))
+              (color-distance  "black"
+                               (face-attribute 'default :background)))
+          (setq lightvals (list 0.65 0.55))
+	(setq lightvals (list 0.35 0.30)))
+      (concatenate 'list
+                   (dolist (n'(.71 .3 .11 .01))
+                     (push (hsl-to-hex (+ n 0.0) 1.0 (nth 0 lightvals)) hexcolors))
+                   (dolist (n '(.81 .49 .17 .05))
+                     (push (hsl-to-hex (+ n 0.0) 1.0 (nth 1 lightvals)) hexcolors)))
+      (reverse hexcolors)))
   :config
-  (colorise-brackets)			; color brackets as well as parentheses
-  :hook ((prog-mode ess-mode inferior-ess-mode) . rainbow-delimiters-mode))
+  (set-face-attribute 'popup-face nil
+		      :background "white" :foreground "black")
+  (set-face-attribute `rainbow-delimiters-depth-1-face nil
+		      :foreground "#888")
+  (set-face-attribute `rainbow-delimiters-depth-2-face nil
+		      :foreground (nth 0 (bracket-colors)))
+  (set-face-attribute `rainbow-delimiters-depth-3-face nil
+		      :foreground (nth 1 (bracket-colors)))
+  (set-face-attribute `rainbow-delimiters-depth-4-face nil
+		      :foreground (nth 2 (bracket-colors)))
+  (set-face-attribute `rainbow-delimiters-depth-5-face nil
+		      :foreground (nth 3 (bracket-colors)))
+  (set-face-attribute `rainbow-delimiters-depth-6-face nil
+		      :foreground (nth 4 (bracket-colors)))
+  (set-face-attribute `rainbow-delimiters-depth-7-face nil
+		      :foreground (nth 5 (bracket-colors)))
+  (set-face-attribute `rainbow-delimiters-depth-8-face nil
+		      :foreground (nth 6 (bracket-colors)))
+  (set-face-attribute `rainbow-delimiters-depth-9-face nil
+		      :foreground (nth 7 (bracket-colors)))
+  (set-face-attribute `rainbow-delimiters-unmatched-face nil
+		      :foreground "white" :background "red")
+  :hook ((prog-mode ess-mode) . rainbow-delimiters-mode))
 
 (use-package rainbow-mode
   :ensure t
   :hook ((prog-mode ess-mode) . rainbow-mode))
+
+;; highlight todo keywords
+(use-package hl-todo
+  :ensure t
+  :config
+  (global-hl-todo-mode 1))
+
+(use-package ace-window
+  :ensure t
+  :init
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  :bind* ("M-o" . ace-window))
 
 (use-package popup
   :ensure t
@@ -186,6 +214,7 @@
 	    (lambda () (csv-align-fields nil (point-min) (point-max)))))
 
 (use-package org
+  :diminish org-indent
   :preface
   (defun spa/mtime (f) (let ((attrs (file-attributes f))) (nth 5 attrs)))
   (defun spa/latest-file (path)
@@ -373,7 +402,7 @@
 ;; volatile highlights - temporarily highlight changes from pasting etc
 (use-package volatile-highlights
   :ensure t
-  :diminish volatile-highlights-mode
+  :diminish
   :config
   (volatile-highlights-mode t))
 
@@ -454,6 +483,7 @@
   (add-to-list 'ivy-ignore-buffers "\\[latex\\]")
   (add-to-list 'ivy-ignore-buffers "\\[fallback\\]")
   (add-to-list 'ivy-ignore-buffers "\\[sas\\]")
+  (set-face-attribute 'ivy-current-match nil :background "ns_selection_bg_color" :foreground "ns_selection_fg_color")
   :bind
   ("C-x b" . ivy-switch-buffer))
 
@@ -488,16 +518,27 @@
   :bind (:map isearch-mode-map
 	      ("C-o" . swiper-from-isearch)))
 
+(use-package projectile
+  :defer 5
+  :diminish
+  :config
+  (projectile-mode))
+
 (use-package counsel-projectile
   :ensure t
   :after (counsel projectile)
   :config
   (counsel-projectile-mode 1))
 
-(use-package projectile
-  :defer 5
-  :config
-  (projectile-mode))
+(use-package ibuffer-projectile
+  :ensure t
+  :defer t
+  :after (ibuffer projectile))
+
+(use-package ibuffer-vc
+  :ensure t
+  :defer t
+  :after (ibuffer))
 
 (use-package avy
   :ensure t
@@ -507,8 +548,51 @@
   ("M-g M-c" . avy-goto-char-2)
   ("M-g M-g" . avy-goto-line))
 
+(use-package anzu
+  :ensure t
+  :diminish
+  :config
+  (global-anzu-mode)
+  :bind (:map global-map
+	      ("M-%" . anzu-query-replace)
+	      ("C-M-%" . anzu-query-replace-regexp)))
 
-  
+(use-package undo-tree
+  :ensure t
+  :diminish
+  :config
+  (global-undo-tree-mode))
+
+(use-package flycheck
+  :ensure t
+  :init
+  (setq flycheck-lintr-linters "with_defaults(todo_comment_linter = NULL, trailing_blank_lines_linter = NULL)")
+  :commands
+  (flycheck-mode
+   flycheck-next-error
+   flycheck-previous-error))
+
+(use-package template
+  :load-path (lambda () (xah-get-fullpath "lisp/template/lisp/"))
+  :config
+  (template-initialize)
+  ;; TODO: Try to set default directory to one in dot-emacs repos!
+  ;; Tried many ways and it doesn't work
+  ;; (setq template-default-directories (xah-get-fullpath "lisp/template/templates/"))
+  :bind
+  ("C-c i" . template-expand-template))
+
+(use-package magit
+  :ensure t
+  :bind
+  ("C-x g" . magit-status)
+  ("C-x M-g" . magit-dispatch-popup))
+
+(use-package reveal-in-osx-finder
+  :ensure t
+  :bind (:map global-map
+	      ("C-c o" . reveal-in-osx-finder)))
+
 ;;;;;;;;;;;;;;;;;
 ;; Programming ;;
 ;;;;;;;;;;;;;;;;;
@@ -690,6 +774,20 @@
 (setq ess-view--spreadsheet-program "open")
 
 
+(use-package markdown-mode
+  :ensure t
+  :mode
+  (("\\`README\\.md\\'" . gfm-mode)
+   ("\\`readme\\.md\\'" . gfm-mode)
+   ("\\.md\\'"          . markdown-mode)
+   ("\\.markdown\\'"    . markdown-mode))
+  :init
+  (setq markdown-command "pandoc -c ~/.emacs.d/github-pandoc.css --from gfm --to html5+smart --mathjax --variable 'mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --highlight-style pygments --standalone --self-contained --quiet"))
+
+(use-package pandoc-mode
+  :ensure t
+  :hook ((markdown-mode) . pandoc-mode))
+
 (use-package poly-markdown
   :ensure t)
 
@@ -808,3 +906,29 @@ Send regions above point."
   :bind (:map polymode-minor-mode-map
 	      ("C-c r" . spa/rmd-render)
 	      ("C-c s" . spa/rmd-run)))
+
+(use-package elpy
+  :ensure t
+  :init
+  (setq elpy-shell-use-project-root nil)
+  :config
+  (elpy-enable)
+  (add-hook 'elpy-mode-hook (lambda () (elpy-shell-set-local-shell
+				   (elpy-project-root))))
+  ;;  Switch to flycheck instead of flymake for real-time syntax checking
+  (when (require 'flycheck nil t)
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode))
+  ;; Set the default shell interpreter to Jupyter for interactive Python
+  (setq python-shell-interpreter "jupyter"
+	python-shell-interpreter-args "console --simple-prompt"
+	python-shell-prompt-detect-failure-warning nil)
+  (add-to-list 'python-shell-completion-native-disabled-interpreters
+               "jupyter"))
+  ;; ;; enable autopep8 formatting on save
+  ;; (require 'py-autopep8)
+  ;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+
+
+
+
