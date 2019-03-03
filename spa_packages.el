@@ -521,8 +521,14 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 (use-package projectile
   :defer 5
   :diminish
+  :init
+  (setq projectile-project-search-path '("~/repos/" "~/Documents/Projects/"))
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :bind* ("C-c P" . (lambda () (interactive)
+                      (projectile-cleanup-known-projects)
+                      (projectile-discover-projects-in-search-path)))
   :config
-  (projectile-mode))
+  (projectile-global-mode))
 
 (use-package counsel-projectile
   :ensure t
@@ -665,8 +671,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq ess-smart-S-assign-key nil)
   ;; Don't ask me for a directory on startup
   (setq ess-ask-for-ess-directory nil)
-  ;; Use ido mode for ESS
-  (setq ess-use-ido t)
+  ;; ;; Use ido mode for ESS
+  ;; (setq ess-use-ido t)
   ;; Would like to use flymake but it's not currently working
   (setq ess-use-flymake nil)
   ;; (setq ess-help-own-frame t)
