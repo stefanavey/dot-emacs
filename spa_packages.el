@@ -70,21 +70,19 @@
 
 (use-package dired-du
   :ensure t
+  :after dired
   :defer t
   :config
   (setq dired-du-size-format t)
   (setq dired-du-update-headers t))
 
 (use-package dired+
-  :disabled t
-  :load-path
-  (lambda () (xah-get-fullpath "lisp/dired+.el"))
+  :load-path (lambda () (xah-get-fullpath "lisp/diredp/"))
+  :after dired
   :config
+  ;; TODO: Fix so that 'e' command in dired is not overwritten
   (setq diredp-hide-details-initially-flag nil)
   (set-face-attribute 'diredp-dir-name nil :foreground "DarkRed"))
-;; TODO: Fix so that 'e' command in dired is not overwritten
-(load-file (xah-get-fullpath "lisp/dired+.el"))
-(setq diredp-hide-details-initially-flag nil)
 
 ;; (use-package dired-quick-sort
 ;;   :config
@@ -420,9 +418,17 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 	 ("M-<up>" . smartscan-symbol-go-backward)))
 
 (use-package openwith
-  :disabled t
   :ensure t
-  :config (openwith-mode t))
+  :init
+  :config
+  (openwith-mode t)
+  (setq openwith-associations
+        (list
+         (list (openwith-make-extension-regexp
+                '("pdf" "doc" "docx" "xls" "xlsx" "ppt" "pptx"))
+               "open"
+               '(file))
+         )))
 
 (use-package doc-view
   :ensure t
@@ -777,7 +783,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 ;; (use-package ess-edit)
 ;; (load (xah-get-fullpath "lisp/ess-R-object-popup"))
 ;; Issue 8 version
-(load (xah-get-fullpath "lisp/ess-view.el"))
+(load (xah-get-fullpath "lisp/ess-view/ess-view.el"))
 (setq ess-view--spreadsheet-program "open")
 
 

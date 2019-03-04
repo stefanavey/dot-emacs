@@ -46,6 +46,8 @@ To solve this problem, when your code only knows the relative path of another fi
   (concat (file-name-directory (or load-file-name buffer-file-name)) @file-relative-path)
   )
 
+(defconst dot-emacs-path (xah-get-fullpath "."))
+
 ;; Load plain Emacs settings
 (load (xah-get-fullpath "spa_vanilla_settings"))
 

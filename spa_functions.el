@@ -121,14 +121,14 @@
 ;; Word count in LaTeX
 (defun latex-word-count ()
   (interactive)
-  (shell-command (concat "~/.emacs.d/texcount/texcount.pl "
+  (shell-command (concat dot-emacs-path "/src/texcount.pl "
 			 ;; "optional arguments" ;
 			 (buffer-file-name))))
 
 ;; Word count master file in LaTeX
 (defun latex-word-count-master ()
   (interactive)
-  (shell-command (concat "~/.emacs.d/texcount/texcount.pl"
+  (shell-command (concat dot-emacs-path "/src/texcount.pl"
 			 " -inc " ; include /input and /include
 			 (buffer-file-name))))
 
@@ -136,7 +136,7 @@
 ;; Try to pass in command arguments, not sure
 ;; (defun latex-word-count-2 (&optional args)
 ;;   (interactive "S")
-;;   (shell-command (concat "~/.emacs.d/texcount/texcount.pl "
+;;   (shell-command (concat dot-emacs-path "/src/texcount.pl "
 ;; 			 args
 ;; 			 (buffer-file-name))))
 
