@@ -82,6 +82,7 @@
   :config
   (setq diredp-hide-details-initially-flag nil)
   (set-face-attribute 'diredp-dir-name nil :foreground "DarkRed"))
+;; TODO: Fix so that 'e' command in dired is not overwritten
 (load-file (xah-get-fullpath "lisp/dired+.el"))
 (setq diredp-hide-details-initially-flag nil)
 
@@ -816,13 +817,26 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (declare-function pm-map-over-spans "polymode-core")
   (declare-function pm-narrow-to-span "polymode-core")
   (defun spa/rmd-render (arg)
-    "Render the current Rmd file to PDF output. 
-   With a prefix arg, edit the R command in the minibuffer" 
+    "Render the current Rmd file to first output format in YAML header.
+
+With a prefix arg, edit the R command in the minibuffer"
     (interactive "P")
+    ;; Find the first output type and use that
+    (save-excursion
+      (beginning-of-buffer)
+      (search-forward-regexp "^output[:]")
+      (next-line)
+      (setq output-format (thing-at-point 'line t))
+      (setq output-format (s-replace ":" "" output-format))
+      (setq output-format (replace-regexp-in-string
+			   (rx (or (: bos (* (any " \t\n")))
+                                   (: (* (any " \t\n")) eos)))
+                           ""
+                           output-format)))
     ;; Build the default R render command
     (setq rcmd (concat "rmarkdown::render('" buffer-file-name "',"
 		       "output_dir = '../reports',"
-		       "output_format = 'html_document')"))
+		       "output_format = '" output-format "')"))
     ;; Check for prefix argument
     (if arg
 	(progn
@@ -936,5 +950,8 @@ Send regions above point."
   ;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
 
-
-
+(use-package yaml-mode
+  :ensure t
+  :defer t
+  :mode
+  ("\\.yml\\'" . yaml-mode))
