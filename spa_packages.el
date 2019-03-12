@@ -606,6 +606,13 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :bind (:map global-map
 	      ("C-c o" . reveal-in-osx-finder)))
 
+(use-package company
+  :ensure t
+  :pin melpa-stable
+  :diminish
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
+
 ;;;;;;;;;;;;;;;;;
 ;; Programming ;;
 ;;;;;;;;;;;;;;;;;
@@ -651,7 +658,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
       (progn
 	(just-one-space)
 	(insert "%>%")
-	(ess-newline-and-indent))))
+	;; (ess-newline-and-indent))
+	(ess-roxy-newline-and-indent))))
   (defun spa/ess-insert-assign ()
     "Insert asignment operator for R"
     (interactive)

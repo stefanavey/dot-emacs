@@ -11,6 +11,15 @@ citecolor: blue
 bibliography: ../lib/library.bib
 link-citations: true
 output:
+    html_document:
+       css: ../lib/custom.css
+       code_folding: hide
+       toc_float: true
+       toc: true
+       df_print: paged
+       highlight: pygments
+       fig_width: 6
+       fig_height: 4.5
     pdf_document:
        toc: true
        toc_depth: 2
@@ -24,15 +33,6 @@ output:
        df_print: kable
        highlight: pygments
        reference_docx: ../lib/WordTemplate.dotx
-       fig_width: 6
-       fig_height: 4.5
-    html_document:
-       css: ../lib/custom.css	
-       code_folding: hide
-       toc_float: true
-       toc: true
-       df_print: paged
-       highlight: pygments
        fig_width: 6
        fig_height: 4.5
 header-includes:

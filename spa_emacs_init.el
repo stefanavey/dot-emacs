@@ -19,7 +19,8 @@
 
 ;; Enable use-package
 (eval-when-compile
-  (require 'use-package))
+  (require 'use-package)
+  (setq use-package-compute-statistics t))
 (require 'diminish)                ;; if you use :diminish
 (require 'bind-key)                ;; if you use any :bind variant
 
