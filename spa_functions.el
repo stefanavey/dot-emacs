@@ -355,30 +355,25 @@ the highlighted region"
 
 (defun spa/insert-common-name()
   (interactive)
-  (if (file-readable-p "~/.emacs.d/contacts/common_names.txt")
-      (cond
-       (setq names (read-lines "~/.emacs.d/contacts/common_names.txt"))
-       (setq name (ivy-completing-read "Name: " names))
-       (insert name))))
+  (set 'names (read-lines "~/.emacs.d/contacts/common_names.txt"))
+  (setq name (ivy-completing-read "Name: " names))
+  (insert name)
+  )
 
 ;; Define a global variable which holds a hash table between common names and
 ;; e-mails. Note that common name is NOT unique so it IS dangerous to use this
 ;; function without discretion because hash values with the same key will
 ;; overwrite previous values with new e-mails
 (defun spa/make-name-hash()
-  (interactive)
-  (if (file-readable-p "~/.emacs.d/contacts/common_name_email.txt")
-      (cond
-
-       (setq key-value-pairs (read-lines "~/.emacs.d/contacts/common_name_email.txt"))
-       ;; (setq key-value-pairs (read-lines "~/.emacs.d/contacts/temp.txt"))
-       (setq my-hash (make-hash-table :size (/ (length key-value-pairs) 2) :test 'equal))
-       ;; While loop to populate the hash table
-       (setq num 0)
-       (while (< num (length key-value-pairs))
-	 (puthash (nth num key-value-pairs) (nth (1+ num) key-value-pairs) my-hash)
-	 (setq num (+ num 2)))
-       my-hash)))
+  (setq key-value-pairs (read-lines "~/.emacs.d/contacts/common_name_email.txt"))
+  ;; (setq key-value-pairs (read-lines "~/.emacs.d/contacts/temp.txt"))  
+  (setq my-hash (make-hash-table :size (/ (length key-value-pairs) 2) :test 'equal))
+  ;; While loop to populate the hash table
+  (setq num 0)
+  (while (< num (length key-value-pairs))
+    (puthash (nth num key-value-pairs) (nth (1+ num) key-value-pairs) my-hash)
+    (setq num (+ num 2)))
+  my-hash)
 (setq spa/name-email-hash (spa/make-name-hash))
 
 ;; See above not about how this is dangerous if used without discretion. Would
@@ -386,13 +381,11 @@ the highlighted region"
 ;; entries.
 (defun spa/kill-email()
   (interactive)
-    (if (file-readable-p "~/.emacs.d/contacts/common_names.txt")
-      (cond
-       (setq names (read-lines "~/.emacs.d/contacts/common_names.txt"))
-       (setq name (ivy-completing-read "Name: " names))
-       (setq email (gethash name spa/name-email-hash))
-       (kill-new email)
-       (message "Copied %s\'s email: %s" name email))))
+  (setq names (read-lines "~/.emacs.d/contacts/common_names.txt"))
+  (setq name (ivy-completing-read "Name: " names))
+  (setq email (gethash name spa/name-email-hash))
+  (kill-new email)
+  (message "Copied %s\'s email: %s" name email))
 
 ;; Search company acronyms stored in a TSV file using swiper
 (defun spa/acro-search()
@@ -408,13 +401,12 @@ the highlighted region"
     (if (get-buffer "*acronyms*")
 	(pop-to-buffer "*acronyms*")
       (progn
-	(pop-to-buffer "*acronyms*")
-	(if (file-readable-p "~/.emacs.d/acronyms/acronyms.txt")
-	(insert-file-contents "~/.emacs.d/acronyms/acronyms.txt"))))
+	(pop-to-buffer "*acronyms*")      
+	(insert-file-contents "~/.emacs.d/acronyms/acronyms.txt")))
     ;; Prevent any accidental changes to the buffer
     (read-only-mode)
     ;; Use swiper to search for the acronym
-    (swiper str)))
+    (swiper str)))		  
 
 ;; Run htop in ansi-term
 (defun spa/htop()
