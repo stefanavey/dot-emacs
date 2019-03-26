@@ -143,6 +143,7 @@ Source: `http://stackoverflow.com/questions/15038277/find-and-replace-without-re
   :hook ((dired-mode doc-view-mode) . auto-revert-mode)
   :config
   (setq auto-revert-verbose nil))
+(setq auto-revert-verbose nil)
   
 (use-package winner
   :unless noninteractive
