@@ -172,7 +172,8 @@ Requires a password"
   :config
   (setq password-cache-expiry 28800)
   ;; Set Bash shell to /bin/bash since only log into Linux machines
-  (setq explicit-shell-file-name "/bin/bash") 
+  (setq explicit-shell-file-name "/bin/bash")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   :bind (("C-x C-g" . spa/find-file-biostat)))
 
 (use-package ispell
