@@ -143,6 +143,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package rainbow-mode
   :ensure t
+  :init
+  (setq rainbow-r-colors t)
   :hook ((prog-mode ess-mode) . rainbow-mode))
 
 ;; highlight todo keywords
