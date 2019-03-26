@@ -843,7 +843,7 @@ With a prefix arg, edit the R command in the minibuffer"
       (search-forward-regexp "^output[:]")
       (next-line)
       (setq output-format (thing-at-point 'line t))
-      (setq output-format (s-replace ":" "" output-format))
+      (setq output-format (s-replace ":\n" "" output-format))
       (setq output-format (replace-regexp-in-string
 			   (rx (or (: bos (* (any " \t\n")))
                                    (: (* (any " \t\n")) eos)))
