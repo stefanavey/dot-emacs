@@ -615,6 +615,11 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :config
   (add-hook 'after-init-hook 'global-company-mode))
 
+(use-package htmlize
+  :ensure t
+  :defer 10
+  :pin melpa-stable)
+
 ;;;;;;;;;;;;;;;;;
 ;; Programming ;;
 ;;;;;;;;;;;;;;;;;
