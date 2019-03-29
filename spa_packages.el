@@ -157,7 +157,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :ensure t
   :init
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-  :bind* ("M-o" . ace-window))
+  :bind (:map global-map
+	      ("M-o" . ace-window)))
 
 (use-package popup
   :ensure t
