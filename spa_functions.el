@@ -287,15 +287,6 @@ the highlighted region"
     (kill-new (file-truename buffer-file-name)))
   (message "Copied path to kill ring"))
 
-;; browse-kill-ring if the last command wasn't a yank when running M-y
-(defadvice yank-pop (around kill-ring-browse-maybe (arg))
-  "If last action was not a yank, run `browse-kill-ring' instead."
-  (if (not (eq last-command 'yank))
-      (browse-kill-ring)
-    ad-do-it))
-
-(ad-activate 'yank-pop)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; kill line if no region active ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

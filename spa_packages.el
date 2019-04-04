@@ -160,6 +160,14 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :bind (:map global-map
 	      ("M-o" . ace-window)))
 
+(use-package browse-kill-ring
+  :ensure t
+  :pin melpa-stable
+  :config
+  (setq browse-kill-ring-replace-yank t)
+  :bind (:map global-map
+	      ("M-y" . browse-kill-ring)))
+
 (use-package popup
   :ensure t
   :config
