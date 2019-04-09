@@ -966,6 +966,7 @@ Send regions above point."
 
 (use-package elpy
   :ensure t
+  :pin melpa-stable
   :init
   (setq elpy-shell-use-project-root nil)
   :config
