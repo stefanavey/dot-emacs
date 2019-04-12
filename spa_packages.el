@@ -978,9 +978,10 @@ Send regions above point."
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
     (add-hook 'elpy-mode-hook 'flycheck-mode))
   ;; Set the default shell interpreter to Jupyter for interactive Python
-  (setq python-shell-interpreter "jupyter"
-	python-shell-interpreter-args "console --simple-prompt"
-	python-shell-prompt-detect-failure-warning nil)
+  (setq elpy-rpc-python-command "python3")
+  (setq python-shell-interpreter "jupyter")
+  (setq python-shell-interpreter-args "console --simple-prompt")
+  (setq python-shell-prompt-detect-failure-warning nil)
   (add-to-list 'python-shell-completion-native-disabled-interpreters
                "jupyter"))
   ;; ;; enable autopep8 formatting on save

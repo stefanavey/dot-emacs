@@ -410,3 +410,16 @@ the highlighted region"
     (progn
       (ansi-term "/bin/bash" "htop")
       (process-send-string "*htop*" "htop\n"))))
+
+(defun spa/preview-sas-data ()
+  "Preview a SAS data set (.sas7bdat binary file) at point in
+     dired buffer by reading into R via the `haven` package and
+     opening it in Excel using the `ess-view` package"
+  (interactive)
+  (setq fname (dired-get-file-for-visit))
+  (run-ess-r)
+  (insert (concat "df <- haven::read_sas('" fname "'); show(df)"))
+  (inferior-ess-send-input)
+  (while (not (inferior-ess-available-p))
+    (sit-for 1))
+  (ess-view-inspect-df nil))
