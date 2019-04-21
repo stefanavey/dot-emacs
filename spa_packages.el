@@ -593,6 +593,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :ensure t
   :init
   (setq flycheck-lintr-linters "with_defaults(todo_comment_linter = NULL, trailing_blank_lines_linter = NULL)")
+  :hook ((elpy-mode ess-mode) . flycheck-mode)
   :commands
   (flycheck-mode
    flycheck-next-error
