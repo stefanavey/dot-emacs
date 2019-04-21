@@ -47,6 +47,7 @@
 
 (use-package color-theme-sanityinc-solarized
   :ensure t
+  :pin melpa-stable
   :after (smart-mode-line)
   :init
   (setq custom-safe-themes t) ;; treat all themes as safe
@@ -56,6 +57,7 @@
 
 (use-package emojify
   :ensure t
+  :pin melpa-stable
   :defer 15
   :hook ((text-mode org-mode) . global-emojify-mode)
   :config
@@ -608,6 +610,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package magit
   :ensure t
+  :pin melpa-stable
   :bind
   ("C-x g" . magit-status)
   ("C-x M-g" . magit-dispatch-popup))
@@ -668,6 +671,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package ess
   :ensure t
+  :pin melpa-stable
   :init (require 'ess-site)
   :preface
   (defun spa/ess-insert-pipe (arg)
