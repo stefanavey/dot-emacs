@@ -545,7 +545,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 (use-package projectile
   :diminish
   :init
-  (setq projectile-project-search-path '("~/repos/" "~/Documents/Projects/"))
+  (setq projectile-project-search-path '("~/repos/"))
   :bind-keymap ("C-c p" . projectile-command-map)
   :bind* ("C-c P" . (lambda () (interactive)
                       (projectile-cleanup-known-projects)
