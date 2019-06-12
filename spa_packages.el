@@ -37,6 +37,9 @@
   :ensure t
   :config (default-text-scale-mode t))
 
+(use-package presentation
+  :load-path (lambda () (xah-get-fullpath "lisp/presentation-mode/")))
+
 (use-package smart-mode-line
   :ensure t
   :init (add-hook 'after-init-hook 'sml/setup)
