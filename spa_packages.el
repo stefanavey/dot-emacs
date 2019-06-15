@@ -37,8 +37,25 @@
   :ensure t
   :config (default-text-scale-mode t))
 
-(use-package presentation
-  :load-path (lambda () (xah-get-fullpath "lisp/presentation-mode/")))
+
+;; TODO: use-package is not working here
+;; (use-package presentation
+;;   :load-path (lambda () (xah-get-fullpath "lisp/presentation-mode/"))
+;;   :preface
+;;   (defun my-presentation-on ()
+;;     (global-display-line-numbers-mode 1))
+;;   (defun my-presentation-off ()
+;;     (global-display-line-numbers-mode -1))
+;;   :hook ((presentation-on  . my-presentation-on)
+;;          (presentation-off . my-presentation-off)))
+
+(defun my-presentation-on ()
+  (global-display-line-numbers-mode 1))
+(defun my-presentation-off ()
+  (global-display-line-numbers-mode -1))
+(load (xah-get-fullpath "lisp/presentation-mode/presentation.el"))
+(add-hook 'presentation-on-hook #'my-presentation-on)
+(add-hook 'presentation-off-hook #'my-presentation-off)
 
 (use-package smart-mode-line
   :ensure t
