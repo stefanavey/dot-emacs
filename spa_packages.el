@@ -104,7 +104,9 @@
   :config
   ;; TODO: Fix so that 'e' command in dired is not overwritten
   (setq diredp-hide-details-initially-flag nil)
-  (set-face-attribute 'diredp-dir-name nil :foreground "DarkRed"))
+  (unbind-key "M-b" dired-mode-map)
+  ;; (set-face-attribute 'diredp-dir-name nil :foreground "DarkRed")
+  )
 
 ;; (use-package dired-quick-sort
 ;;   :config
