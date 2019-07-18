@@ -190,6 +190,11 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :bind (:map global-map
 	      ("M-y" . browse-kill-ring)))
 
+;; TODO: Needs some customization to work with ESS
+(use-package scratch
+  :ensure t
+  :pin melpa-stable)
+
 (use-package popup
   :ensure t
   :config
