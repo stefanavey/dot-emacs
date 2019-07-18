@@ -72,7 +72,7 @@
   :init
   (setq custom-safe-themes t) ;; treat all themes as safe
   :config
-  (color-theme-sanityinc-solarized--define-theme light)
+  (color-theme-sanityinc-solarized--define-theme dark)
   (load-theme 'smart-mode-line-respectful))
 
 (use-package emojify
