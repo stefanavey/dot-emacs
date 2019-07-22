@@ -28,6 +28,11 @@
   (exec-path-from-shell-initialize)
 )
 
+
+(use-package date2name
+  :ensure t
+)
+
 ;;;;;;;;;;;;;;;;
 ;; Aesthetics ;;
 ;;;;;;;;;;;;;;;;
