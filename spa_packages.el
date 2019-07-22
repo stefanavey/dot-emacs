@@ -624,7 +624,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 (use-package flycheck
   :ensure t
   :init
-  (setq flycheck-lintr-linters "with_defaults(todo_comment_linter = NULL, trailing_blank_lines_linter = NULL)")
+  (setq flycheck-lintr-linters "with_defaults(todo_comment_linter = NULL, trailing_blank_lines_linter = NULL, line_length_linter(80))")
   :hook ((elpy-mode ess-mode) . flycheck-mode)
   :commands
   (flycheck-mode
@@ -747,8 +747,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq ess-smart-S-assign-key nil)
   ;; Don't ask me for a directory on startup
   (setq ess-ask-for-ess-directory nil)
-  ;; ;; Use ido mode for ESS
-  ;; (setq ess-use-ido t)
+  ;; Don't use ido so I can use ivy completion
+  (setq ess-use-ido nil)
   ;; Would like to use flymake but it's not currently working
   (setq ess-use-flymake nil)
   ;; (setq ess-help-own-frame t)
@@ -840,12 +840,14 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 	      ("<backtab>" . ess-complete-object-name)
 	      ("C-c M-c" . ess-eval-paragraph-and-go)
 	      ("M-=" . spa/ess-insert-pipe)
-	      ("M--" . spa/ess-insert-assign))
+	      ("M--" . spa/ess-insert-assign)
+	      ("C-c ?" . ess-help))
   :bind (:map inferior-ess-mode-map
 	      ("M-r" . comint-history-isearch-backward)
 	      ("C-u M-r" . comint-history-isearch-backward-regexp)
 	      ("M-=" . spa/ess-insert-pipe)
-  	      ("M--" . spa/ess-insert-assign))
+  	      ("M--" . spa/ess-insert-assign)
+	      ("C-c ?" . ess-help))
   :bind (:map global-map
 	      ("C-x 9" . spa/R-scratch)))
 
