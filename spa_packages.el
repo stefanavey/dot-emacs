@@ -670,7 +670,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :config
   ;; ideally would like this to be the same as polymode chunks which switch
   ;; when theme changes but this is good enough for now
-  (set-face-attribute 'ein:cell-input-area nil :background "#fd4ef3e3da54"))
+  ;; (set-face-attribute 'ein:cell-input-area nil :background "#fd4ef3e3da54")
+  )
 
 
 (use-package matlab-mode
