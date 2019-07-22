@@ -952,34 +952,13 @@ With a prefix arg, edit the R command in the minibuffer"
       (interrupt-process)
       (switch-to-buffer orig-buffer)
       (ess-send-string process rcmd t)))
-  (defun spa/rmd-send-chunk ()
-    "Send current R chunk to ess process."
+  (defun spa/rmd-eval-chunk-and-step ()
+    "Evaluate current R chunk and move point to next chunk."
     (interactive)
-    (and (eq (oref pm/chunkmode :mode) 'r-mode) ;;'
-	 (pm-with-narrowed-to-span nil
-           (goto-char (point-min))
-           (forward-line)
-           (ess-eval-region (point) (point-max) nil nil 'R)))) ;;'
-  (defun spa/rmd-send-chunk-and-step ()
-    "Send current R chunk to ess process and advance to next chunk."
-    (interactive)
-    (and (eq (oref pm/chunkmode :mode) 'r-mode) ;;'
-	 (ess-eval-buffer 'R)
-	 (search-forward "```")
-	 (search-forward "```")
-	 (forward-line)))
-  ;; TODO: Debug this
-  (defun spa/rmd-send-buffer (arg)
-    "Send all R code blocks in buffer to ess process. With prefix
-Send regions above point."
-    (interactive "P")
-    (save-restriction
-      (widen)
-      (save-excursion
-	(pm-map-over-spans
-	 'spa/rmd-send-chunk (point-min) ;;'
-	 ;; adjust this point to send prior regions
-	 (if arg (point) (point-max))))))
+    (polymode-eval-chunk (point))
+    (search-forward "```")
+    (search-forward "```")
+    (forward-line))
   (defun spa/insert-r-code-chunk (arg)
     "Insert R Markdown code chunk. With prefix arg, read in chunk header contents"
     (interactive "P")
@@ -997,8 +976,7 @@ Send regions above point."
       (insert "\n")
       (insert "```\n")))
   :config
-  (define-key poly-markdown+R-mode-map (kbd "C-c C-f")  'spa/rmd-send-chunk-and-step)
-  (define-key poly-markdown+R-mode-map (kbd "C-c C-b")  'spa/rmd-send-buffer)
+  (define-key poly-markdown+R-mode-map (kbd "C-c C-f")  'spa/rmd-eval-chunk-and-step)
   (define-key markdown-mode-map (kbd "C-c C-a c") 'spa/insert-r-code-chunk)
   :bind (:map polymode-minor-mode-map
 	      ("C-c r" . spa/rmd-render)
