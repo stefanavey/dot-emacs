@@ -457,10 +457,14 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package smartscan
   :ensure t
+  :defer t
   :config
   (global-smartscan-mode 1)
-  :bind (("M-<down>" . smartscan-symbol-go-forward)
-	 ("M-<up>" . smartscan-symbol-go-backward)))
+  (unbind-key "M-n" smartscan-map)
+  (unbind-key "M-p" smartscan-map)
+  :bind (:map smartscan-map
+	      ("M-<down>" . smartscan-symbol-go-forward)
+	      ("M-<up>" . smartscan-symbol-go-backward)))
 
 (use-package openwith
   :ensure t
