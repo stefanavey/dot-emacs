@@ -200,6 +200,7 @@ Requires a password"
 (use-package flyspell
   :diminish (flyspell-mode . "φ")
   :after auto-complete
+  :defer t
   :preface
   ;; Flyspell signals an error if there is no spell-checking tool is
   ;; installed. We can advice `turn-on-flyspell' and `flyspell-prog-mode'

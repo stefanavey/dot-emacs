@@ -9,6 +9,8 @@
 	("org" . "https://orgmode.org/elpa/")))
 (package-initialize)
 
+(require 'benchmark-init)
+
 ;;;;;;;;;;;;;;;;;
 ;; use-package ;;
 ;;;;;;;;;;;;;;;;;

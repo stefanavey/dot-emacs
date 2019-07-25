@@ -506,6 +506,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package pdf-tools
   :ensure t
+  :defer t
   :pin melpa-stable
   :config
   (pdf-tools-install))
