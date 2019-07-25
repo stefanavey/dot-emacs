@@ -534,12 +534,15 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq ivy-use-virtual-buffers t)
   (setq ivy-initial-inputs-alist nil)  
   (setq ivy-count-format "(%d/%d) ")
-  (add-to-list 'ivy-ignore-buffers "\\[r\\]")
-  (add-to-list 'ivy-ignore-buffers "\\[poly-head-tail\\]")
-  (add-to-list 'ivy-ignore-buffers "\\[yaml\\]")
-  (add-to-list 'ivy-ignore-buffers "\\[latex\\]")
-  (add-to-list 'ivy-ignore-buffers "\\[fallback\\]")
-  (add-to-list 'ivy-ignore-buffers "\\[sas\\]")
+  ;; Polymode seems to have taken care of this so don't need to ignore these
+  ;; buffer-specific modes. If I do in current Polymode, can't actually find the
+  ;; file I have open.
+  ;; (add-to-list 'ivy-ignore-buffers "\\[r\\]")
+  ;; (add-to-list 'ivy-ignore-buffers "\\[poly-head-tail\\]")
+  ;; (add-to-list 'ivy-ignore-buffers "\\[yaml\\]")
+  ;; (add-to-list 'ivy-ignore-buffers "\\[latex\\]")
+  ;; (add-to-list 'ivy-ignore-buffers "\\[fallback\\]")
+  ;; (add-to-list 'ivy-ignore-buffers "\\[sas\\]")
   (set-face-attribute 'ivy-current-match nil :background "ns_selection_bg_color" :foreground "ns_selection_fg_color")
   :bind
   ("C-x b" . ivy-switch-buffer))
