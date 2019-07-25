@@ -9,8 +9,6 @@
 	("org" . "https://orgmode.org/elpa/")))
 (package-initialize)
 
-(require 'benchmark-init)
-
 ;;;;;;;;;;;;;;;;;
 ;; use-package ;;
 ;;;;;;;;;;;;;;;;;
@@ -25,6 +23,16 @@
   (setq use-package-compute-statistics t))
 (require 'diminish)                ;; if you use :diminish
 (require 'bind-key)                ;; if you use any :bind variant
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Benchmarking Emacs Init ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package benchmark-init
+  :ensure t
+  :pin melpa-stable
+  :config
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;; Custom function to get full path relative to caller's location
 (defun xah-get-fullpath (@file-relative-path)
