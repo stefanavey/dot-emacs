@@ -861,10 +861,10 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 ;; (use-package ess-edit)
 ;; (load (xah-get-fullpath "lisp/ess-R-object-popup"))
-;; Issue 8 version
-(load (xah-get-fullpath "lisp/ess-view/ess-view.el"))
-(setq ess-view--spreadsheet-program "open")
-
+(use-package ess-view
+  :ensure t
+  :init
+  (setq ess-view--spreadsheet-program "open"))
 
 (use-package markdown-mode
   :ensure t
