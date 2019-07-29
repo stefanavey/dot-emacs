@@ -649,6 +649,15 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :bind
   ("C-c i" . template-expand-template))
 
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :config
+  (use-package yasnippet-snippets
+    :ensure t)
+  (yas-global-mode 1)
+  (add-to-list #'yas-snippet-dirs (xah-get-fullpath "lisp/yasnippet-ess/ess-mode")))
+
 (use-package magit
   :ensure t
   :pin melpa-stable

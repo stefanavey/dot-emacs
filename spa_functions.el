@@ -423,3 +423,21 @@ the highlighted region"
   (while (not (inferior-ess-available-p))
     (sit-for 1))
   (ess-view-inspect-df nil))
+
+;; Package Menu Tweaks
+;; https://emacs.stackexchange.com/questions/31872/how-to-update-packages-installed-with-use-package
+(defun package-menu-find-marks ()
+  "Find packages marked for action in *Packages*."
+  (interactive)
+  (occur "^[A-Z]"))
+
+;; Only in Emacs 25.1+
+(defun package-menu-filter-by-status (status)
+  "Filter the *Packages* buffer by status."
+  (interactive
+   (list (completing-read
+          "Status: " '("new" "installed" "dependency" "obsolete"))))
+  (package-menu-filter (concat "status:" status)))
+
+(define-key package-menu-mode-map "s" #'package-menu-filter-by-status)
+(define-key package-menu-mode-map "a" #'package-menu-find-marks)
