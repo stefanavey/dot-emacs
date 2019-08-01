@@ -656,7 +656,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (use-package yasnippet-snippets
     :ensure t)
   (yas-global-mode 1)
-  (add-to-list #'yas-snippet-dirs (xah-get-fullpath "lisp/yasnippet-ess/ess-mode")))
+  (add-to-list #'yas-snippet-dirs (xah-get-fullpath "lisp/yasnippet-ess/")))
 
 (use-package magit
   :ensure t
@@ -872,6 +872,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 ;; (load (xah-get-fullpath "lisp/ess-R-object-popup"))
 (use-package ess-view
   :ensure t
+  :diminish
   :init
   (setq ess-view--spreadsheet-program "open"))
 

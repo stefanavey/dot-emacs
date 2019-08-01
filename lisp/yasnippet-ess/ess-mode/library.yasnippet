@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: library(...)
+# key: lib
+# contributor: Stefan Avey <avey.stefan@gmail.com>
+# --
+library(${1:$$(yas-choose-value (ess-r-installed-packages))})
+$0

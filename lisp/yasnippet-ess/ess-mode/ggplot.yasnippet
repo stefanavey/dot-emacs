@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ggplot(..., aes(...)) + ...
+# key: ggp
+# contributor: Stefan Avey <avey.stefan@gmail.com>
+# --
+ggplot(data = ${1:plot_data}, aes(${2:aesthetics})) +
+`(ess-indent-or-complete)`$0
