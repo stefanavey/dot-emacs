@@ -893,16 +893,20 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :hook ((markdown-mode) . pandoc-mode))
 
 (use-package poly-markdown
+  :pin melpa-stable
   :ensure t)
 
 (use-package poly-R
+  :pin melpa-stable
   :ensure t)
 
 (use-package poly-noweb
+  :pin melpa-stable
   :ensure t)
 
 (use-package polymode
   :ensure t
+  :pin melpa-stable
   :after (poly-markdown poly-R poly-noweb)
   :init
   (require 'polymode-core)
