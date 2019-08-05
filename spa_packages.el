@@ -655,6 +655,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :config
   (use-package yasnippet-snippets
     :ensure t)
+  (use-package stan-snippets
+    :ensure t)
   (yas-global-mode 1)
   (add-to-list #'yas-snippet-dirs (xah-get-fullpath "lisp/yasnippet-ess/")))
 
@@ -1030,3 +1032,9 @@ With a prefix arg, edit the R command in the minibuffer"
   :defer t
   :mode
   ("\\.yml\\'" . yaml-mode))
+
+(use-package stan-mode
+  :ensure t
+  :pin melpa-stable
+  :mode
+  ("\\.stan\\'" . stan-mode))
