@@ -651,6 +651,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package yasnippet
   :ensure t
+  :pin melpa-stable
   :diminish yas-minor-mode
   :config
   (use-package yasnippet-snippets

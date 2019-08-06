@@ -306,6 +306,10 @@ Requires a password"
   :bind (:map ibuffer-mode-map
               ("/ V" . spa/ibuffer-vc-or-projectile-filter-groups)))
 
+(use-package warnings
+  :config
+  (add-to-list 'warning-suppress-types '(yasnippet backquote-change)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous                                                               ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
