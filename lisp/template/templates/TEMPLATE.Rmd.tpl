@@ -93,13 +93,7 @@ R Source code is available online [here](<PATH_TO_FILE>)
 
 ```{r sessionInfo, eval=TRUE, echo=FALSE, warning=FALSE}
 
-si <- devtools::session_info()
-pkgs <- si$packages$package
-cutoff <- 16
-pkgs_trunc <- ifelse(nchar(pkgs) < cutoff, pkgs,
-                     paste0(substr(pkgs, 1, cutoff), "..."))
-si$packages$package <- pkgs_trunc
-pander(si)
+pander(sessionInfo())
 
 ```
 
