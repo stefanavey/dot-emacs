@@ -420,14 +420,18 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package org-clock-convenience
   :ensure t
-  :after (org)
   :init
   (setq org-clock-convenience-clocked-agenda-re "^ +\\([^:]+\\): *\\(\\([ 012][0-9]\\):\\([0-5][0-9]\\)\\)\\(?:-\\(\\([ 012][0-9]\\):\\([0-5][0-9]\\)\\)\\|.*\\)? +Clocked: +\\(([0-9]+:[0-5][0-9])\\|(-)\\)")
-  :bind (:map org-agenda-mode-map
-   	   ("<S-up>" . org-clock-convenience-timestamp-up)
-   	   ("<S-down>" . org-clock-convenience-timestamp-down)
-   	   ("o" . org-clock-convenience-fill-gap)
-   	   ("e" . org-clock-convenience-fill-gap-both)))
+  (defun spa/org-agenda-mode-fn ()
+      (define-key org-agenda-mode-map
+	(kbd "<S-up>") #'org-clock-convenience-timestamp-up)
+      (define-key org-agenda-mode-map
+	(kbd "<S-down>") #'org-clock-convenience-timestamp-down)
+      (define-key org-agenda-mode-map
+	(kbd "o") #'org-clock-convenience-fill-gap)
+      (define-key org-agenda-mode-map
+	(kbd "e") #'org-clock-convenience-fill-gap-both))
+  (add-hook 'org-agenda-mode-hook #'spa/org-agenda-mode-fn))
 
 (use-package ox-pandoc
   :ensure t
