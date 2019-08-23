@@ -570,7 +570,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   ("M-x" . counsel-M-x)
   ("C-x C-f" . counsel-find-file)
   ("C-c g" . counsel-git)
-  ("C-c r" . counsel-minibuffer-history))
+  ("C-c r" . counsel-minibuffer-history)
+  ("C-c m" . counsel-imenu))
 
 ;; TODO: Update refcard with this bit of C-o doing swiper from regular isearch
 (use-package swiper
