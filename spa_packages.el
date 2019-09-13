@@ -478,7 +478,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq openwith-associations
         (list
          (list (openwith-make-extension-regexp
-                '("pdf" "html" "svg" "doc" "docx" "xls" "xlsx" "ppt" "pptx" "pptm"))
+                '("pdf" "html" "svg" "doc" "docx" "xls" "xlsx" "ppt" "pptx" "pptm" "pzfx"))
                "open"
                '(file))
          )))
@@ -575,7 +575,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   ("C-x C-f" . counsel-find-file)
   ("C-c g" . counsel-git)
   ("C-c r" . counsel-minibuffer-history)
-  ("C-c m" . counsel-imenu))
+  ("C-c M" . counsel-imenu))
 
 ;; TODO: Update refcard with this bit of C-o doing swiper from regular isearch
 (use-package swiper

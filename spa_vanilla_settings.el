@@ -223,9 +223,12 @@ Requires a password"
 
 (use-package calendar
   :init
-  (setq calendar-latitude 40.231846)
-  (setq calendar-longitude -75.252461)
-  (setq calendar-location-name "North Wales, PA")
+  ;; (setq calendar-latitude 40.231846)
+  ;; (setq calendar-longitude -75.252461)
+  ;; (setq calendar-location-name "North Wales, PA")
+  (setq calendar-latitude 30.3322)
+  (setq calendar-longitude -81.6557)
+  (setq calendar-location-name "Jacksonville, FL")
   (setq calendar-time-zone -300)
   (setq calendar-standard-time-zone-name "EST")
   (setq calendar-daylight-time-zone-name "EDT"))
