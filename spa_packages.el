@@ -404,6 +404,10 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   ;; Open links to directories in Emacs (dired) instead of the default
   ;; "open" command that opens the finder
   (add-to-list 'org-file-apps '(directory . emacs))
+  ;; Customize org-goto to search headlines via completion
+  (setq org-goto-interface 'outline-path-completion)
+  (setq org-outline-path-complete-in-steps nil)
+  (setq org-goto-max-level 8)
   :hook
   (org-indent-mode . spa/diminish-org-indent)
   (org-mode . turn-on-font-lock)
