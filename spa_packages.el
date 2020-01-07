@@ -905,20 +905,20 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :hook ((markdown-mode) . pandoc-mode))
 
 (use-package poly-markdown
-  :pin melpa-stable
+  ;; :pin melpa-stable
   :ensure t)
 
 (use-package poly-R
-  :pin melpa-stable
+  ;; :pin melpa-stable
   :ensure t)
 
 (use-package poly-noweb
-  :pin melpa-stable
+  ;; :pin melpa-stable
   :ensure t)
 
 (use-package polymode
   :ensure t
-  :pin melpa-stable
+  ;; :pin melpa-stable
   :after (poly-markdown poly-R poly-noweb)
   :init
   (require 'polymode-core)
@@ -1012,6 +1012,10 @@ With a prefix arg, edit the R command in the minibuffer"
       (insert "\n")
       (insert "```\n")))
   :config
+  ;; NOTE. Can use M-n v v to eval current chunk (or chunks in active region)
+  ;; but does not step. Can use M-n v b to eval all chunks in buffer, M-n v u/d
+  ;; to evaluate all code before (u) or start at point and evaluate until end of
+  ;; code (d).
   (define-key poly-markdown+R-mode-map (kbd "C-c C-f")  'spa/rmd-eval-chunk-and-step)
   (define-key markdown-mode-map (kbd "C-c C-a c") 'spa/insert-r-code-chunk)
   :bind (:map polymode-minor-mode-map
