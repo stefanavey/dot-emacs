@@ -19,6 +19,8 @@
 ;; column-number-mode
 ;; show row and column in status bar
 (column-number-mode 1)
+;; Count from 1 instead of 0
+(setq column-number-indicator-zero-based nil)
 
 (use-package ls-lisp
   :init
