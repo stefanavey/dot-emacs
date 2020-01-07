@@ -443,8 +443,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package org-bullets
   :ensure t
-  :hook (org-mode . (lambda () (org-bullets-mode 1)))
-  :after (org))
+  :commands org-bullets-mode
+  :hook (org-mode . org-bullets-mode))
 
 (use-package google-this
   :ensure t
