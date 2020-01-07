@@ -286,6 +286,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   ;;   (shell) ;; open a new subshell in emacs
   ;;   (insert "~/Documents/pushRepos.sh")) ;; Run the script interactively in emacs  
   :config
+  ;; Increase org-imenu-depth to be able to search deeper headings
+  (setq org-imenu-depth 6)
   ;; Set properties for how org-agenda shows clock consistency
  (setq org-agenda-clock-consistency-checks
    (quote
