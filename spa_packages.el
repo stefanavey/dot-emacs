@@ -66,19 +66,17 @@
   :ensure t
   :init (add-hook 'after-init-hook 'sml/setup)
   :config
-  (setq sml/theme 'respectful)
+  (setq sml/theme 'automatic)
   (setq sml/modified-char "m")
   (add-to-list 'sml/replacer-regexp-list '("^~/Box Sync/" ":Box:") t))
 
 (use-package color-theme-sanityinc-solarized
   :ensure t
   :pin melpa-stable
-  :after (smart-mode-line)
   :init
   (setq custom-safe-themes t) ;; treat all themes as safe
   :config
-  (color-theme-sanityinc-solarized--define-theme dark)
-  (load-theme 'smart-mode-line-respectful))
+  (color-theme-sanityinc-solarized--define-theme dark))
 
 (use-package emojify
   :ensure t
