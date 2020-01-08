@@ -560,7 +560,6 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package counsel
   :ensure t
-  :after ivy
   :diminish
   :preface
   (defun ivy--cd-onedrive ()
