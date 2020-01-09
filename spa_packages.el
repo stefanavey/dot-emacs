@@ -685,6 +685,9 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :ensure t
   :pin melpa-stable
   :diminish
+  :init
+  (setq company-minimum-prefix-length 2) ; do idle completion with at least 2 characters
+  (setq company-selection-wrap-around t) ; wrap around during selection
   :config
   (add-hook 'after-init-hook 'global-company-mode)
   ;; Customize company faces for dark background (ok for light background too)
@@ -872,6 +875,18 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 	       (if (file-remote-p default-directory)
 		   (setq inferior-ess-r-program "/usr/bin/R")
 		 (setq inferior-ess-r-program "/usr/local/bin/R"))))
+  ;; ;; TODO Try to execute some code every time inferior R process starts but
+  ;; ;; doesn't work here
+  ;; (add-hook 'inferior-ess-mode-hook
+  ;; 	    (ess-execute "utils::rc.options(funarg.suffix = \" = \")"))
+
+  ;; Auto-completion using company
+  (setq ess-use-company nil) ; don't auto-insert ess backends so I can define it custom below
+  (defun comp-ess-config ()
+    (make-variable-buffer-local 'company-backends)
+    (add-to-list 'company-backends
+		 '(company-R-args company-R-objects company-dabbrev-code :separate)))
+  (add-hook 'ess-mode-hook #'comp-ess-config)
   :bind (:map ess-mode-map
 	      ("<backtab>" . ess-complete-object-name)
 	      ("C-c M-c" . ess-eval-paragraph-and-go)
