@@ -908,7 +908,18 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :ensure t
   :diminish
   :init
-  (setq ess-view--spreadsheet-program "open"))
+  (setq ess-view--spreadsheet-program "open")
+  :config
+  ;; Redefine package function to be smart about getting the correct R process
+  (defun ess-view-extract-R-process ()
+    "Return the name of R running in current buffer."
+    (let*
+	((proc (ess-get-process))         ; Modified from (proc (get-buffer-process (current-buffer)))
+	 (string-proc (prin1-to-string proc))
+	 (selected-proc (s-match "^#<process \\(R:?[0-9]*\\)>$" string-proc)))
+      (nth 1 (-flatten selected-proc))
+      )
+    ))
 
 (use-package markdown-mode
   :ensure t
