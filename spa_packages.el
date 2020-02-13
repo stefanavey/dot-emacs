@@ -1068,14 +1068,15 @@ With a prefix arg, edit the R command in the minibuffer"
     (add-hook 'elpy-mode-hook 'flycheck-mode))
   ;; Set the default shell interpreter to Jupyter for interactive Python
   (setq elpy-rpc-python-command "python3")
-  (setq python-shell-interpreter "jupyter")
-  (setq python-shell-interpreter-args "console --simple-prompt")
+  ;; (setq elpy-shell-echo-output nil)
+  (setq python-shell-interpreter "ipython")
+  (setq python-shell-interpreter-args "--simple-prompt -c exec('__import__(\\'readline\\')') -i")
   (setq python-shell-prompt-detect-failure-warning nil)
   (add-to-list 'python-shell-completion-native-disabled-interpreters
                "jupyter"))
-  ;; ;; enable autopep8 formatting on save
-  ;; (require 'py-autopep8)
-  ;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+;; ;; enable autopep8 formatting on save
+;; (require 'py-autopep8)
+;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
 
 (use-package yaml-mode
