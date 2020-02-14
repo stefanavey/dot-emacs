@@ -246,11 +246,10 @@ Requires a password"
   :hook
   ((prog-mode ess-mode inferior-ess-mode) . (my-auto-hook)))
 
-;; TODO: This isn't getting turned on in ESS modes
 (use-package subword-mode
   :diminish
   :hook
-  ((ess-mode-hook inferior-ess-mode-hook) . subword-mode))
+  ((ess-mode inferior-ess-mode) . subword-mode))
 
 (use-package ibuffer
   :ensure t
