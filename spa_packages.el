@@ -887,9 +887,31 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
     (add-to-list 'company-backends
 		 '(company-R-args company-R-objects company-dabbrev-code :separate)))
   (add-hook 'ess-mode-hook #'comp-ess-config)
+  ;; From jabranham's Emacs init file
+  (defun spa/ess-beginning-of-pipe-or-end-of-line ()
+    "Find point position of end of line or beginning of pipe %>%."
+    (if (search-forward "%>%" (line-end-position) t)
+        (goto-char (match-beginning 0))
+      (end-of-line)))
+  (defun spa/ess-eval-pipe-through-line (vis)
+    "Like `ess-eval-paragraph' but only evaluates up to the pipe on this line.
+
+If no pipe, evaluate paragraph through the end of current line.
+
+Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
+    (interactive "P")
+    (save-excursion
+      (let ((end (progn
+                   (spa/ess-beginning-of-pipe-or-end-of-line)
+                   (point)))
+            (beg (progn (backward-paragraph)
+                        (ess-skip-blanks-forward 'multiline)
+                        (point))))
+        (ess-eval-region beg end vis))))
   :bind (:map ess-mode-map
 	      ("<backtab>" . ess-complete-object-name)
 	      ("C-c M-c" . ess-eval-paragraph-and-go)
+	      ("C-c C-\\" . spa/ess-eval-pipe-through-line)
 	      ("M-=" . spa/ess-insert-pipe)
 	      ("M--" . spa/ess-insert-assign)
 	      ("C-c ?" . ess-help))
