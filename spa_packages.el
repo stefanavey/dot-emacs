@@ -81,7 +81,7 @@
 (use-package emojify
   :ensure t
   :pin melpa-stable
-  :defer 15
+  :defer 10
   :hook ((text-mode org-mode) . global-emojify-mode)
   :config
   (setq emojify-program-contexts '(comments))
@@ -465,7 +465,6 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package smartscan
   :ensure t
-  :defer t
   :config
   (global-smartscan-mode 1)
   (unbind-key "M-n" smartscan-map)
@@ -600,18 +599,17 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package counsel-projectile
   :ensure t
-  :after (counsel projectile)
   :config
   (counsel-projectile-mode 1))
 
 (use-package ibuffer-projectile
   :ensure t
-  :defer t
+  :defer 1
   :after (ibuffer projectile))
 
 (use-package ibuffer-vc
   :ensure t
-  :defer t
+  :defer 1
   :after (ibuffer))
 
 (use-package avy
@@ -709,7 +707,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 ;;;;;;;;;;;;;;;;;
 (use-package ein
   :ensure t
-  :defer t
+  :defer 5
   :commands ein:notebooklist-open
   :config
   ;; ideally would like this to be the same as polymode chunks which switch
@@ -720,6 +718,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package matlab-mode
   :ensure t
+  :defer 5
   :mode ("\\.m$" . matlab-mode)
   :preface
   (defun spa/matlab-insert-assign ()
@@ -1103,12 +1102,13 @@ With a prefix arg, edit the R command in the minibuffer"
 
 (use-package yaml-mode
   :ensure t
-  :defer t
+  :defer 1
   :mode
   ("\\.yml\\'" . yaml-mode))
 
 (use-package stan-mode
   :ensure t
+  :defer 2
   :pin melpa-stable
   :mode
   ("\\.stan\\'" . stan-mode))
