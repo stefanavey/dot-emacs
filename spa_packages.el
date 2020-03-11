@@ -282,7 +282,21 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   ;;   "Insert the script pushRepos.sh into the subshell process"
   ;;   ;;  (shell-command "~/Documents/pushAllRepos.sh")) ;; old way!
   ;;   (shell) ;; open a new subshell in emacs
-  ;;   (insert "~/Documents/pushRepos.sh")) ;; Run the script interactively in emacs  
+  ;;   (insert "~/Documents/pushRepos.sh")) ;; Run the script interactively in emacs
+  ;; ORG-MODE:  * My Task
+  ;;              SCHEDULED: <%%(diary-last-day-of-month date)>
+  ;; DIARY:  %%(diary-last-day-of-month date) Last Day of the Month
+  ;; See also:  (setq org-agenda-include-diary t)
+  ;; source: https://emacs.stackexchange.com/questions/31683/schedule-org-task-for-last-day-of-every-month
+  ;; (diary-last-day-of-month '(2 28 2017))
+  (defun diary-last-day-of-month (date)
+    "Return `t` if DATE is the last day of the month."
+    (let* ((day (calendar-extract-day date))
+	   (month (calendar-extract-month date))
+	   (year (calendar-extract-year date))
+	   (last-day-of-month
+            (calendar-last-day-of-month month year)))
+      (= day last-day-of-month)))
   :config
   ;; Increase org-imenu-depth to be able to search deeper headings
   (setq org-imenu-depth 6)
