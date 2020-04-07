@@ -585,11 +585,15 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (defun ivy--cd-ideafast ()
     (interactive)
     (ivy--cd "~/Newcastle University/IDEA-FAST - Documents/"))
+  (defun ivy--cd-dhec ()
+    (interactive)
+    (ivy--cd "~/jnj/Immunology Digital Health Working Group - Documents/General/"))
   :config
   (define-key counsel-find-file-map (kbd "M-d") 'ivy--cd-onedrive)
   (define-key counsel-find-file-map (kbd "M-a") 'ivy--cd-ta)
   (define-key counsel-find-file-map (kbd "M-r") 'ivy--cd-repos)
   (define-key counsel-find-file-map (kbd "M-i") 'ivy--cd-ideafast)
+  (define-key counsel-find-file-map (kbd "M-t") 'ivy--cd-dhec)
   :bind
   ("M-x" . counsel-M-x)
   ("C-x C-f" . counsel-find-file)
