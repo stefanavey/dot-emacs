@@ -369,21 +369,49 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   ;; '@' sign means that I want to log a note with time
   ;; stamp when the state changes
   (setq org-todo-keywords
-	(quote ((sequence "TODO(t)" "|" "DONE(d)")
-		(sequence "REPLAY(r)" "|" "REPLAYED(p)")
-		(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING")
-		(sequence "RUNNING(R@)" "ERROR(E@)" "|"  "FINISHED(F@)")	      )))
-
+	(quote ((sequence "TODO(t!)" "|" "DONE(d!)" "DELEGATED(o@/!)")
+		(type "PROJECT(P!)" "PROJECT_HOLD(H!)" "|" "PROJECT_DONE(D!)"
+		      "PROJECT_TRANSFERRED(T@)")
+		(sequence "REPLAY(r)" "|" "REPLAYED(p!)")
+		(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"
+			  "PHONE" "MEETING")
+		(sequence "RUNNING(R@)" "ERROR(E@)" "|"  "FINISHED(F@)"))))
+(setq org-agenda-custom-commands
+      '(
+	;; ("p" "List Active Projects" tags "-MAYBE+TODO=\"PROJECT\"")
+	("p" "List Active Projects" tags "-MAYBE/PROJECT")
+	("l" "List Things to Do During Lunch" tags-todo "lunch")
+	("n" "Agenda and TODOs (without Projects)"
+	 ((agenda #1="")
+	  (todo "TODO|REPLAY|WAITING|HOLD|RUNNING|ERROR")))
+	("w" "Weekly Timesheet"
+	 ((agenda ""))
+	 (
+	  ;; (org-agenda-format-date "")
+	  (org-agenda-overriding-header "WEEKLY TIMESHEET")
+	  (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))
+	  (org-agenda-span 'week)
+	  (org-agenda-start-on-weekday 1)
+	  (org-agenda-start-with-clockreport-mode t)
+	  (org-agenda-time-grid nil)))
+	))
   (setq org-todo-keyword-faces
 	(quote (("TODO" :foreground "red" :weight bold)
 		("DONE" :foreground "forest green" :weight bold)
+		("PROJECT" :foreground "#3288bd" :weight bold)
+		("DELEGATED" :foreground "forest green" :weight bold)
+		("COMPLETED" :foreground "forest green" :weight bold)
+		("TRANSFERRED" :foreground "forest green" :weight bold)
 		("REPLAY" :foreground "red" :weight bold)
-		("REPLAYED" :foreground "forest green" :weight bold)		
+		("REPLAYED" :foreground "forest green" :weight bold)
 		("WAITING" :foreground "orange" :weight bold)
-		("HOLD" :foreground "magenta" :weight bold)
+		("HOLD" :foreground "orange" :weight bold)
 		("CANCELLED" :foreground "forest green" :weight bold)
 		("MEETING" :foreground "forest green" :weight bold)
-		("PHONE" :foreground "forest green" :weight bold))))
+		("PHONE" :foreground "forest green" :weight bold)
+		("RUNNING" :foreground "orange" :weight bold)
+		("ERROR" :foreground "magenta" :weight bold)
+		("FINISHED" :foreground "forest green" :weight bold))))
   ;; (setq org-todo-keywords
   ;; 	   '((sequence "TODO(t)" "|" "DONE(d@)")
   ;; 	     (sequence "REPORT(r)" "BUG(b@)" "KNOWNCAUSE(k@)" "|" "FIXED(f@)")
