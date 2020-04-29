@@ -1134,3 +1134,9 @@ With a prefix arg, edit the R command in the minibuffer"
   :pin melpa-stable
   :mode
   ("\\.stan\\'" . stan-mode))
+
+(use-package s3ed
+  :ensure t
+  :bind (:map global-map
+	      (("C-c C-r f" . s3ed-find-file)
+	       ("C-c C-r s" . s3ed-save-file))))
