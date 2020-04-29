@@ -380,10 +380,20 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
       '(
 	;; ("p" "List Active Projects" tags "-MAYBE+TODO=\"PROJECT\"")
 	("p" "List Active Projects" tags "-MAYBE/PROJECT")
-	("l" "List Things to Do During Lunch" tags-todo "lunch")
+	("l" "What to do during Lunch?" tags-todo "lunch")
 	("n" "Agenda and TODOs (without Projects)"
 	 ((agenda #1="")
 	  (todo "TODO|REPLAY|WAITING|HOLD|RUNNING|ERROR")))
+	("q" "Quick tasks" tags-todo "EFFORT>=\"0:01\"&EFFORT<=\"0:15\"")
+        ("d" "Timeline for today" ((agenda "" ))
+         (;(org-agenda-ndays 1)
+	  (org-agenda-span 'day)
+          (org-agenda-show-log t)
+          (org-agenda-log-mode-items '(clock closed))
+          (org-agenda-clockreport-mode t)
+	  (org-agenda-time-grid nil)
+          (org-agenda-entry-types '())))
+        ("W" "Waiting for" todo "WAITING")
 	("w" "Weekly Timesheet"
 	 ((agenda ""))
 	 (
@@ -393,6 +403,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 	  (org-agenda-span 'week)
 	  (org-agenda-start-on-weekday 1)
 	  (org-agenda-start-with-clockreport-mode t)
+          (org-agenda-show-log t)
+	  (org-agenda-show-clocking-issues) ; NOTE: Not working to show clocking issues
 	  (org-agenda-time-grid nil)))
 	))
   (setq org-todo-keyword-faces
