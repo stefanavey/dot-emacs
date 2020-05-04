@@ -378,8 +378,11 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 		(sequence "RUNNING(R@)" "ERROR(E@)" "|"  "FINISHED(F@)"))))
 (setq org-agenda-custom-commands
       '(
-	;; ("p" "List Active Projects" tags "-MAYBE+TODO=\"PROJECT\"")
-	("p" "List Active Projects" tags "-MAYBE/PROJECT")
+	("p" . "List All Projects and High-Level Tasks") ; describe prefix "p"
+	("pe" "Everything Concrete" tags "-MAYBE/PROJECT")
+	("pp" "Portfolio Projects" tags "-MAYBE+project/PROJECT")
+	("pn" "Non-Portfolio Projects" tags "-MAYBE-project/PROJECT")
+	("pm" "Someday or Maybe Projects" tags "+MAYBE/PROJECT")
 	("l" "What to do during Lunch?" tags-todo "lunch")
 	("n" "Agenda and TODOs (without Projects)"
 	 ((agenda #1="")
