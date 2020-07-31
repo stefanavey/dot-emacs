@@ -337,8 +337,9 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
   ;; Default notes and agenda files
   (setq org-default-notes-file "~/OneDrive - JNJ/org/notes.org")
-  ;; Refile
+  ;; Specify where items can be refiled (any agenda file up to 9th level)
   (setq org-refile-targets '((nil :maxlevel . 9) (org-agenda-files :maxlevel . 9)))
+  (setq org-refile-use-outline-path 'file)
   ;; org-capture templates
   ;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol
   (setq org-capture-templates
@@ -364,9 +365,11 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 	'(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
   ;; Press C-a twice to get to start of heading instead of stars
   (setq org-special-ctrl-a/e 'reversed)
-  ;; Capture time stamps when TODO states change
+  ;; Log a "CLOSED" timestamp when something is done
   (setq org-log-done 'time)
-  ;; '@' sign means that I want to log a note with time
+  (setq org-log-reschedule 'note)
+  ;; '@' log timestamp AND note when this keyword is entered
+  ;; '!' log timestamp when you leave keyword
   ;; stamp when the state changes
   (setq org-todo-keywords
 	(quote ((sequence "TODO(t!)" "|" "DONE(d!)" "DELEGATED(o@/!)")
