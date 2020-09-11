@@ -372,13 +372,15 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   ;; '!' log timestamp when you leave keyword
   ;; stamp when the state changes
   (setq org-todo-keywords
-	(quote ((sequence "TODO(t!)" "|" "DONE(d!)" "DELEGATED(o@/!)")
+	(quote ((sequence "LEARN(l!)" "|" "LEARNED(L!)")
+		(sequence "TODO(t!)" "|" "DONE(d!)" "DELEGATED(o@/!)")
 		(type "PROJECT(P!)" "PROJECT_HOLD(H!)" "|" "PROJECT_DONE(D!)"
 		      "PROJECT_TRANSFERRED(T@)")
 		(sequence "REPLAY(r)" "|" "REPLAYED(p!)")
+		(sequence "TOREAD(e)" "|" "READ(E!)")
 		(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"
 			  "PHONE" "MEETING")
-		(sequence "RUNNING(R@)" "ERROR(E@)" "|"  "FINISHED(F@)"))))
+		(sequence "RUNNING(R@)" "ERROR(e@)" "|"  "FINISHED(f@)"))))
 (setq org-agenda-custom-commands
       '(
 	("p" . "List All Projects and High-Level Tasks") ; describe prefix "p"
@@ -389,7 +391,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 	("l" "What to do during Lunch?" tags-todo "lunch")
 	("n" "Agenda and TODOs (without Projects)"
 	 ((agenda #1="")
-	  (todo "TODO|REPLAY|WAITING|HOLD|RUNNING|ERROR")))
+	  (todo "TODO|LEARN|TOREAD|REPLAY|WAITING|HOLD|RUNNING")))
 	("q" "Quick tasks" tags-todo "EFFORT>=\"0:01\"&EFFORT<=\"0:15\"")
         ("d" "Timeline for today" ((agenda "" ))
          (;(org-agenda-ndays 1)
@@ -422,6 +424,10 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 		("TRANSFERRED" :foreground "forest green" :weight bold)
 		("REPLAY" :foreground "red" :weight bold)
 		("REPLAYED" :foreground "forest green" :weight bold)
+		("LEARN" :foreground "red" :weight bold)
+		("LEARNED" :foreground "forest green" :weight bold)
+		("TOREAD" :foreground "red" :weight bold)
+		("READ" :foreground "forest green" :weight bold)
 		("WAITING" :foreground "orange" :weight bold)
 		("HOLD" :foreground "orange" :weight bold)
 		("CANCELLED" :foreground "forest green" :weight bold)
