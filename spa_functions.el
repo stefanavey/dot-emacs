@@ -411,6 +411,7 @@ the highlighted region"
       (ansi-term "/bin/bash" "htop")
       (process-send-string "*htop*" "htop\n"))))
 
+;; NOTE: This is not working
 (defun spa/preview-sas-data ()
   "Preview a SAS data set (.sas7bdat binary file) at point in
      dired buffer by reading into R via the `haven` package and
@@ -418,11 +419,12 @@ the highlighted region"
   (interactive)
   (setq fname (dired-get-file-for-visit))
   (run-ess-r)
-  (insert (concat "df <- haven::read_sas('" fname "'); show(df)"))
-  (inferior-ess-send-input)
   (while (not (inferior-ess-available-p))
     (sit-for 1))
-  (ess-view-inspect-df nil))
+  (insert (concat "df <- haven::read_sas('" fname "'); show(df)"))
+  (inferior-ess-send-input)
+  (ess-view-data-frame-view "df" nil nil t))
+  ;; (ess-view-inspect-df nil))
 
 ;; Package Menu Tweaks
 ;; https://emacs.stackexchange.com/questions/31872/how-to-update-packages-installed-with-use-package

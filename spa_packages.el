@@ -817,7 +817,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 
 (use-package ess
   :ensure t
-  :pin melpa-stable
+  :pin melpa
   :init (require 'ess-site)
   :preface
   (defun spa/ess-insert-pipe (arg)
@@ -1189,6 +1189,21 @@ With a prefix arg, edit the R command in the minibuffer"
 
 (use-package s3ed
   :ensure t
+  :init
+  (setq s3ed-profile-name "itx-acd")
   :bind (:map global-map
 	      (("C-c C-r f" . s3ed-find-file)
 	       ("C-c C-r s" . s3ed-save-file))))
+
+;; Emacs X Window Manager
+(require 'exwm)
+(require 'exwm-config)
+(exwm-config-example)
+
+;; (use-package exwm
+;;   :ensure t)
+;; (use-package exwm-config
+;;   :ensure t
+;;   :config
+;;   (exwm-config-example))
+
