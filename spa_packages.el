@@ -117,6 +117,7 @@
 
 (use-package rainbow-delimiters
   :ensure t
+  :pin melpa-stable
   :after (color cl)
   :preface
   (defun hsl-to-hex (h s l)
@@ -144,28 +145,29 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
                      (push (hsl-to-hex (+ n 0.0) 1.0 (nth 1 lightvals)) hexcolors)))
       (reverse hexcolors)))
   :config
-  (set-face-attribute 'popup-face nil
-		      :background "white" :foreground "black")
-  (set-face-attribute `rainbow-delimiters-depth-1-face nil
-		      :foreground "#888")
-  (set-face-attribute `rainbow-delimiters-depth-2-face nil
-		      :foreground (nth 0 (bracket-colors)))
-  (set-face-attribute `rainbow-delimiters-depth-3-face nil
-		      :foreground (nth 1 (bracket-colors)))
-  (set-face-attribute `rainbow-delimiters-depth-4-face nil
-		      :foreground (nth 2 (bracket-colors)))
-  (set-face-attribute `rainbow-delimiters-depth-5-face nil
-		      :foreground (nth 3 (bracket-colors)))
-  (set-face-attribute `rainbow-delimiters-depth-6-face nil
-		      :foreground (nth 4 (bracket-colors)))
-  (set-face-attribute `rainbow-delimiters-depth-7-face nil
-		      :foreground (nth 5 (bracket-colors)))
-  (set-face-attribute `rainbow-delimiters-depth-8-face nil
-		      :foreground (nth 6 (bracket-colors)))
-  (set-face-attribute `rainbow-delimiters-depth-9-face nil
-		      :foreground (nth 7 (bracket-colors)))
-  (set-face-attribute `rainbow-delimiters-unmatched-face nil
-		      :foreground "white" :background "red")
+  ;; Commented out to use defaults since this wasn't looking right
+  ;; (set-face-attribute 'popup-face nil
+  ;; 		      :background "white" :foreground "black")
+  ;; (set-face-attribute `rainbow-delimiters-depth-1-face nil
+  ;; 		      :foreground "#888")
+  ;; (set-face-attribute `rainbow-delimiters-depth-2-face nil
+  ;; 		      :foreground (nth 0 (bracket-colors)))
+  ;; (set-face-attribute `rainbow-delimiters-depth-3-face nil
+  ;; 		      :foreground (nth 1 (bracket-colors)))
+  ;; (set-face-attribute `rainbow-delimiters-depth-4-face nil
+  ;; 		      :foreground (nth 2 (bracket-colors)))
+  ;; (set-face-attribute `rainbow-delimiters-depth-5-face nil
+  ;; 		      :foreground (nth 3 (bracket-colors)))
+  ;; (set-face-attribute `rainbow-delimiters-depth-6-face nil
+  ;; 		      :foreground (nth 4 (bracket-colors)))
+  ;; (set-face-attribute `rainbow-delimiters-depth-7-face nil
+  ;; 		      :foreground (nth 5 (bracket-colors)))
+  ;; (set-face-attribute `rainbow-delimiters-depth-8-face nil
+  ;; 		      :foreground (nth 6 (bracket-colors)))
+  ;; (set-face-attribute `rainbow-delimiters-depth-9-face nil
+  ;; 		      :foreground (nth 7 (bracket-colors)))
+  ;; (set-face-attribute `rainbow-delimiters-unmatched-face nil
+  ;; 		      :foreground "white" :background "red")
   :hook ((prog-mode ess-mode) . rainbow-delimiters-mode))
 
 (use-package rainbow-mode
@@ -624,28 +626,6 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 (use-package counsel
   :ensure t
   :diminish
-  :preface
-  (defun ivy--cd-onedrive ()
-    (interactive)
-    (ivy--cd "~/OneDrive - JnJ/"))
-  (defun ivy--cd-ta ()
-    (interactive)
-    (ivy--cd "~/OneDrive - JnJ/Documents/TA"))
-  (defun ivy--cd-repos ()
-    (interactive)
-    (ivy--cd "~/repos/"))
-  (defun ivy--cd-ideafast ()
-    (interactive)
-    (ivy--cd "~/Newcastle University/IDEA-FAST - Documents/"))
-  (defun ivy--cd-dhec ()
-    (interactive)
-    (ivy--cd "~/jnj/Immunology Digital Health Working Group - Documents/General/"))
-  :config
-  (define-key counsel-find-file-map (kbd "M-d") 'ivy--cd-onedrive)
-  (define-key counsel-find-file-map (kbd "M-a") 'ivy--cd-ta)
-  (define-key counsel-find-file-map (kbd "M-r") 'ivy--cd-repos)
-  (define-key counsel-find-file-map (kbd "M-i") 'ivy--cd-ideafast)
-  (define-key counsel-find-file-map (kbd "M-t") 'ivy--cd-dhec)
   :bind
   ("M-x" . counsel-M-x)
   ("C-x C-f" . counsel-find-file)
@@ -1195,10 +1175,10 @@ With a prefix arg, edit the R command in the minibuffer"
 	      (("C-c C-r f" . s3ed-find-file)
 	       ("C-c C-r s" . s3ed-save-file))))
 
-;; Emacs X Window Manager
-(require 'exwm)
-(require 'exwm-config)
-(exwm-config-example)
+;; ;; Emacs X Window Manager
+;; (require 'exwm)
+;; (require 'exwm-config)
+;; (exwm-config-example)
 
 ;; (use-package exwm
 ;;   :ensure t)
@@ -1207,3 +1187,7 @@ With a prefix arg, edit the R command in the minibuffer"
 ;;   :config
 ;;   (exwm-config-example))
 
+
+(use-package auto-complete
+  :ensure t
+  :pin melpa-stable)
