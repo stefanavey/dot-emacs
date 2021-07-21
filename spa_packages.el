@@ -300,6 +300,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
             (calendar-last-day-of-month month year)))
       (= day last-day-of-month)))
   :config
+  ;; Don't change the face of DONE headlines
+  (setq org-fontify-done-headline nil)
   ;; Increase org-imenu-depth to be able to search deeper headings
   (setq org-imenu-depth 6)
   ;; Set properties for how org-agenda shows clock consistency
