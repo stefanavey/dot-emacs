@@ -304,6 +304,9 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq org-fontify-done-headline nil)
   ;; Increase org-imenu-depth to be able to search deeper headings
   (setq org-imenu-depth 6)
+  ;; Enforce TODO Dependencies so parent cannot be done when child is undone or ordering
+  ;; must be followed
+  (setq org-enforce-todo-dependencies t)
   ;; Set properties for how org-agenda shows clock consistency
  (setq org-agenda-clock-consistency-checks
    (quote
@@ -314,7 +317,9 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 		    (:foreground "white"))
 		   :overlap-face nil :gap-face nil :no-end-time-face nil :long-face nil :short-face nil)))  
   ;; Set format for org duration in hours rather than default days:hours:minutes
-  (setq org-duration-format (quote h:mm))  
+  (setq org-duration-format (quote h:mm))
+  ;; Show notifications within Org mode in the minibuffer
+  (setq org-show-notification-handler 'message)
   ;; Setup org mode to view latex formula previews
   (setq org-latex-create-formula-image-program 'imagemagick)
   ;; Set the directory for org files
@@ -389,8 +394,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
       '(
 	("p" . "List All Projects and High-Level Tasks") ; describe prefix "p"
 	("pe" "Everything Concrete" tags "-MAYBE/PROJECT")
-	("pp" "Portfolio Projects" tags "-MAYBE+project/PROJECT")
-	("pn" "Non-Portfolio Projects" tags "-MAYBE-project/PROJECT")
+	("pp" "Portfolio Projects" tags "-MAYBE+portfolio/PROJECT")
+	("pn" "Non-Portfolio Projects" tags "-MAYBE-portfolio/PROJECT")
 	("pm" "Someday or Maybe Projects" tags "+MAYBE/PROJECT")
 	("l" "What to do during Lunch?" tags-todo "lunch")
 	("n" "Agenda and TODOs (without Projects)"
