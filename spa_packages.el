@@ -551,7 +551,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq openwith-associations
         (list
          (list (openwith-make-extension-regexp
-                '("pdf" "html" "svg" "doc" "docx" "xls" "xlsx" "ppt" "pptx" "pptm" "pzfx"))
+                '("pdf" "html" "svg" "doc" "docx" "xls" "xlsx" "xlsm" "ppt" "pptx" "pptm" "pzfx"))
                "open"
                '(file))
          )))
