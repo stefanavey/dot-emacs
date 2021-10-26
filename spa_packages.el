@@ -1198,3 +1198,10 @@ With a prefix arg, edit the R command in the minibuffer"
 (use-package auto-complete
   :ensure t
   :pin melpa-stable)
+
+(use-package speed-type
+  :ensure t
+  :pin melpa-stable)
+
+;; Minor mode for typing speed
+(load (xah-get-fullpath "lisp/typing-speed/typing-speed.el"))

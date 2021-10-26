@@ -29,6 +29,9 @@
 ;; continuously displayed in the mode line, in the format [75 WPM]
 ;; To use, just load this file and invoke (typing-speed-mode) or
 ;; (turn-on-typing-speed-mode)
+;;
+;; 2021-10-26: Modified this from original version to work in org-mode by simply
+;; adding org-self-insert-command in addition to self-insert-command.
 
 (define-minor-mode typing-speed-mode
     "Displays your typing speed in the status bar."
@@ -43,7 +46,7 @@
         (remove-hook 'post-command-hook 'typing-speed-post-command-hook)
         (cancel-timer typing-speed-update-timer))))
 
-(defcustom typing-speed-window 5
+(defcustom typing-speed-window 10
   "The window (in seconds) over which typing speed should be evaluated."
   :group 'typing-speed)
 
@@ -73,7 +76,7 @@ It will always also update after every command."
   "When typing-speed-mode is enabled, fires after every command. If the
 command is self-insert-command, log it as a keystroke and update the
 typing speed."
-  (cond ((eq this-command 'self-insert-command)
+  (cond ((member this-command '(self-insert-command org-self-insert-command))
          (let ((current-time (float-time)))
           (push current-time typing-speed-event-queue)
           (typing-speed-update)))
