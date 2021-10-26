@@ -10,6 +10,9 @@
 ;; Built-in Modes                                                              ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Ask before killing Emacs because sometimes I close it by accident
+(setq confirm-kill-emacs 'y-or-n-p)
+
 ;; Show matching parentheses
 (show-paren-mode 1)
 
