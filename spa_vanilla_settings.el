@@ -176,8 +176,9 @@ Requires a password"
   	      "/ssh:savey@biostatshiny.jnj.com:~")))
   :config
   (setq password-cache-expiry 28800)
-  ;; Set Bash shell to /bin/bash since only log into Linux machines
-  (setq explicit-shell-file-name "/bin/bash")
+  ;; Originally set Bash explicitly to /bin/bash but now using default (e.g. zsh
+  ;; on newer macs
+  ;; (setq explicit-shell-file-name "/bin/bash")
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   :bind (("C-x C-g" . spa/find-file-biostat)))
 
@@ -352,8 +353,9 @@ Requires a password"
 ;; Better wild cards in search
 (setq search-whitespace-regexp ".*?")
 
-;; Set these so that `shell-command` and `compile` understand aliases in .bashrc
-(setq shell-file-name "bash")
+;; NOTE: Now using zsh shell
+;; Originally set these so that `shell-command` and `compile` understand aliases in .bashrc
+;; (setq shell-file-name "bash")
 (setq shell-command-switch "-ic")
 
 ;; Location Settings
