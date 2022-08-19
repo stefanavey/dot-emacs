@@ -495,7 +495,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 	("C-c l" . org-store-link)
 	("C-c c" . org-capture)
 	("C-c C-f" . org-forward-heading-same-level)
-	("C-c s" . 'spa/org-link-screenshot)))
+	("C-c s" . 'spa/org-link-screenshot)
+	("C-c &" . 'org-mark-ring-goto)))
 
 (use-package org-clock-convenience
   :ensure t
@@ -1016,6 +1017,8 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
 (use-package pandoc-mode
   :ensure t
   :hook ((markdown-mode) . pandoc-mode))
+
+(use-package quarto-mode)
 
 (use-package poly-markdown
   ;; :pin melpa-stable
