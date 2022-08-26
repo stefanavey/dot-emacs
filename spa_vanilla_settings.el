@@ -376,3 +376,7 @@ Requires a password"
 (setq trash-directory "~/.Trash")
 
 (setq sentence-end-double-space nil)
+
+;; Use the default mail program to open mailto: links
+(setq browse-url-mailto-function 'browse-url-generic)
+(setq browse-url-generic-program "open")
