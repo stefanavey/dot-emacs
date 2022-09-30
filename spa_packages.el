@@ -101,15 +101,120 @@
   (setq dired-du-size-format t)
   (setq dired-du-update-headers t))
 
-(use-package dired+
-  :load-path (lambda () (xah-get-fullpath "lisp/diredp/"))
-  :after dired
+;; ;; Disable due to error after upgrading to Emacs 28+. Getting syntax
+;; ;; highlighting now from diredfl
+;; (use-package dired+
+;;   :load-path (lambda () (xah-get-fullpath "lisp/diredp/"))
+;;   :after dired
+;;   :config
+;;   ;; TODO: Fix so that 'e' command in dired is not overwritten
+;;   (setq diredp-hide-details-initially-flag nil)
+;;   (unbind-key "M-b" dired-mode-map)
+;;   ;; (set-face-attribute 'diredp-dir-name nil :foreground "DarkRed")
+;;   )
+
+(use-package diredfl
+  :ensure t
+  :pin melpa-stable
   :config
-  ;; TODO: Fix so that 'e' command in dired is not overwritten
-  (setq diredp-hide-details-initially-flag nil)
-  (unbind-key "M-b" dired-mode-map)
-  ;; (set-face-attribute 'diredp-dir-name nil :foreground "DarkRed")
-  )
+  (add-hook 'dired-mode-hook 'diredfl-mode)
+  ;; Based on init file from John Soo (https://github.com/jsoo1/dotfiles)
+  ;; Define colors with base colors coming from solarized color theme
+  (defvar base03  "#002b36" "Theme base03.")
+  (defvar base02  "#073642" "Theme base02.")
+  (defvar base01  "#586e75" "Theme base01.")
+  (defvar base00  "#657b83" "Theme base00.")
+  (defvar base3   "#fdf6e3" "Theme base3.")
+  (defvar base2   "#eee8d5" "Theme base2.")
+  (defvar base1   "#93a1a1" "Theme base1.")
+  (defvar base0   "#839496" "Theme base0.")
+  (defvar yellow  "#b58900" "Theme yellow.")
+  (defvar red     "#dc322f" "Theme red.")
+  (defvar green   "#859900" "Theme green.")
+  (defvar blue    "#286bd2" "Theme blue.")
+  (defvar cyan    "#2aa198" "Theme cyan.")
+  (defvar magenta "#d33682" "Theme magenta.")
+  (defvar orange  "#cb4b16" "Theme orange.")
+  (defvar violet  "#6c71c4" "Theme violet.")
+  ;; Assign the colors for diredfl to overwrite the defaults which are not good
+  ;; when using solarized. NOTE: This is customized for solarized-dark but can
+  ;; be modified for solarized-light using the other base values.
+  (set-face-attribute
+   diredfl-dir-heading nil
+   :foreground blue
+   :background base03)
+  (set-face-attribute
+   diredfl-number nil
+   :foreground green
+   :background base03)
+  (set-face-attribute
+   diredfl-date-time nil
+   :foreground yellow
+   :background base03)
+  (set-face-attribute
+   diredfl-file-name nil
+   :foreground base0
+   :background base03)
+  (set-face-attribute
+   diredfl-file-suffix nil
+   :foreground green
+   :background base03)
+  (set-face-attribute
+   diredfl-dir-name nil
+   :foreground blue
+   :background base03)
+  (set-face-attribute
+   diredfl-symlink nil
+   :foreground cyan
+   :background base03)
+  (set-face-attribute
+   diredfl-no-priv nil
+   :foreground base0
+   :background base03)
+  (set-face-attribute
+   diredfl-dir-priv nil
+   :foreground blue
+   :background base03)
+  (set-face-attribute
+   diredfl-read-priv nil
+   :foreground base0
+   :background base03)
+  (set-face-attribute
+   diredfl-write-priv nil
+   :foreground cyan
+   :background base03)
+  (set-face-attribute
+   diredfl-exec-priv nil
+   :foreground magenta
+   :background base03)
+  (set-face-attribute
+   diredfl-rare-priv nil
+   :foreground magenta
+   :background base03)
+  (set-face-attribute
+   diredfl-other-priv nil
+   :foreground orange
+   :background base03)
+  (set-face-attribute
+   diredfl-deletion nil
+   :foreground red
+   :background base03)
+  (set-face-attribute
+   diredfl-deletion-file-name nil
+   :foreground red
+   :background base03)
+  (set-face-attribute
+   diredfl-flag-mark nil
+   :foreground violet
+   :background base03)
+  (set-face-attribute
+   diredfl-flag-mark-line nil
+   :foreground violet
+   :background base03)
+  (set-face-attribute
+   diredfl-ignored-file-name nil
+   :foreground base01
+   :background base03))
 
 ;; (use-package dired-quick-sort
 ;;   :config
