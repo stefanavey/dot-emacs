@@ -495,40 +495,64 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 		(sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"
 			  "PHONE" "MEETING")
 		(sequence "RUNNING(R@)" "ERROR(e@)" "|"  "FINISHED(f@)"))))
-(setq org-agenda-custom-commands
-      '(
-	("p" . "List All Projects and High-Level Tasks") ; describe prefix "p"
-	("pe" "Everything Concrete" tags "-MAYBE/PROJECT")
-	("pp" "Portfolio Projects" tags "-MAYBE+portfolio/PROJECT")
-	("pn" "Non-Portfolio Projects" tags "-MAYBE-portfolio/PROJECT")
-	("pm" "Someday or Maybe Projects" tags "+MAYBE/PROJECT")
-	("l" "What to do during Lunch?" tags-todo "lunch")
-	("n" "Agenda and TODOs (without Projects)"
-	 ((agenda #1="")
-	  (todo "TODO|LEARN|TOREAD|REPLAY|WAITING|HOLD|RUNNING")))
-	("q" "Quick tasks" tags-todo "EFFORT>=\"0:01\"&EFFORT<=\"0:15\"")
-        ("d" "Timeline for today" ((agenda "" ))
-         (;(org-agenda-ndays 1)
-	  (org-agenda-span 'day)
-          (org-agenda-show-log t)
-          (org-agenda-log-mode-items '(clock closed))
-          (org-agenda-clockreport-mode t)
-	  (org-agenda-time-grid nil)
-          (org-agenda-entry-types '())))
-        ("W" "Waiting for" todo "WAITING")
-	("w" "Weekly Timesheet"
-	 ((agenda ""))
-	 (
-	  ;; (org-agenda-format-date "")
-	  (org-agenda-overriding-header "WEEKLY TIMESHEET")
-	  (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))
-	  (org-agenda-span 'week)
-	  (org-agenda-start-on-weekday 1)
-	  (org-agenda-start-with-clockreport-mode t)
-          (org-agenda-show-log t)
-	  (org-agenda-show-clocking-issues) ; NOTE: Not working to show clocking issues
-	  (org-agenda-time-grid nil)))
-	))
+  (setq org-agenda-custom-commands
+	'(
+	  ("p" . "List All Projects and High-Level Tasks") ; describe prefix "p"
+	  ("pe" "Everything Concrete" tags "-MAYBE/PROJECT")
+	  ("pp" "Portfolio Projects" tags "-MAYBE+portfolio/PROJECT")
+	  ("pn" "Non-Portfolio Projects" tags "-MAYBE-portfolio/PROJECT")
+	  ("pm" "Someday or Maybe Projects" tags "+MAYBE/PROJECT")
+	  ("l" "What to do during Lunch?" tags-todo "lunch")
+	  ("n" "Agenda and TODOs (without Projects)"
+	   ((agenda #1="")
+	    (todo "TODO|LEARN|TOREAD|REPLAY|WAITING|HOLD|RUNNING")))
+	  ("q" "Quick tasks" tags-todo "EFFORT>=\"0:01\"&EFFORT<=\"0:15\"")
+          ("d" "Timeline for today" ((agenda "" ))
+           (;(org-agenda-ndays 1)
+	    (org-agenda-span 'day)
+            (org-agenda-show-log t)
+            (org-agenda-log-mode-items '(clock closed))
+            (org-agenda-clockreport-mode t)
+	    (org-agenda-time-grid nil)
+            (org-agenda-entry-types '())))
+          ("W" "Waiting on Others" todo "WAITING")
+	  ("w" "Weekly Review"
+	   ((tags "CLOSED>=\"<-1w>\"")	; NOTE: This is slow
+	    (agenda ""))
+	   (
+	    ;; (org-agenda-format-date "")
+	    (org-agenda-overriding-header "WEEKLY TIMESHEET")
+	    ;; (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))
+	    (org-agenda-span 'week)
+	    (org-agenda-start-on-weekday 1)
+	    (org-agenda-start-with-clockreport-mode t)
+            (org-agenda-show-log t)
+	    (org-agenda-show-clocking-issues) ; NOTE: Not working to show clocking issues
+	    (org-agenda-time-grid nil)
+	    ))
+	  ("P" "Printed agenda"
+           ((agenda "" ((org-agenda-span 7)                      ;; overview of appointments
+			(org-agenda-start-on-weekday nil)         ;; calendar begins today
+			(org-agenda-repeating-timestamp-show-all t)
+			(org-agenda-entry-types '(:timestamp :sexp))))
+            (agenda "" ((org-agenda-span 1)                      ; daily agenda
+			(org-deadline-warning-days 7)            ; 7 day advanced warning for deadlines
+			(org-agenda-todo-keyword-format "[ ]")
+			(org-agenda-scheduled-leaders '("" ""))
+			(org-agenda-prefix-format "%t%s")))
+            (todo "TODO"                                          ;; todos sorted by context
+                  ((org-agenda-prefix-format "[ ] %T: ")
+                   (org-agenda-sorting-strategy '(priority-down tag-up))
+                   (org-agenda-todo-keyword-format "")
+                   (org-agenda-overriding-header "\nTasks by Context\n------------------\n"))))
+           (
+	    ;; (org-agenda-with-colors nil)
+            (org-agenda-compact-blocks t)
+            (org-agenda-remove-tags t)
+            ;; (ps-number-of-columns 2)
+            ;; (ps-landscape-mode t)
+	    ))
+	   ))
   (setq org-todo-keyword-faces
 	(quote (("TODO" :foreground "red" :weight bold)
 		("DONE" :foreground "forest green" :weight bold)
