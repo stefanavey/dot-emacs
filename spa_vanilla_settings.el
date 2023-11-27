@@ -19,6 +19,9 @@
 ;; overwrite selected text
 (delete-selection-mode t)
 
+;; Enable undelete-frame command
+(undelete-frame-mode t)
+
 ;; column-number-mode
 ;; show row and column in status bar
 (column-number-mode 1)
@@ -47,12 +50,12 @@
   :after (auto-complete)
   :config
   (add-hook 'prog-mode-hook
-            (lambda ()
+            #'(lambda ()
               (font-lock-add-keywords nil
                                       '(("\\<\\(FIXME\\|TODO\\|BUG\\):" 1 font-lock-warning-face t)))))
 
   (add-hook 'prog-mode-hook
-            '(lambda ()
+            #'(lambda ()
                (local-set-key (kbd "C-c C-u") 'string-inflection-cycle))))
 
 (use-package dired
@@ -305,7 +308,7 @@ Requires a password"
     )  
   :config
   (add-hook 'ibuffer-mode-hook
-	    '(lambda ()
+	    #'(lambda ()
 	       (ibuffer-auto-mode 1)	     
 	       (ibuffer-switch-to-saved-filter-groups "work")))
   
