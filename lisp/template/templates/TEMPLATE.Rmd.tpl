@@ -32,13 +32,12 @@ output:
        toc: true
        df_print: kable
        highlight: pygments
-       reference_docx: ../lib/WordTemplate.dotx
        fig_width: 6
        fig_height: 4.5
 header-includes:
     - \usepackage{wallpaper}
 ---
-\URCornerWallPaper{0.175}{../lib/Janssen_Prof_RGB.jpg}
+\URCornerWallPaper{0.175}{../lib/JJ_IM_Logo_SingleLine_Red_RGB.png}
 
 ```{r setup, eval=TRUE, echo=FALSE, message=FALSE}
 

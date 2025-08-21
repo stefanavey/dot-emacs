@@ -78,14 +78,15 @@
   :config
   (color-theme-sanityinc-solarized--define-theme dark))
 
-(use-package emojify
-  :ensure t
-  :pin melpa-stable
-  :defer 10
-  :hook ((text-mode org-mode) . global-emojify-mode)
-  :config
-  (setq emojify-program-contexts '(comments))
-  :bind ("C-c E" . emojify-insert-emoji))
+;; NOTE: Now using built-in Emoji commands bound to 'C-x 8 e' prefix
+;; (use-package emojify
+;;   :ensure t
+;;   :pin melpa-stable
+;;   :defer 10
+;;   :hook ((text-mode org-mode) . global-emojify-mode)
+;;   :config
+;;   (setq emojify-program-contexts '(comments))
+;;   :bind ("C-c E" . emojify-insert-emoji))
 
 ;; dired-x is not available?
 (use-package dired-x
@@ -594,7 +595,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   
   ;; Prefer a vertical split in Org mode for the agenda
   (defadvice org-agenda (around split-vertically activate)
-    (let ((split-width-threshold 80))  ; or whatever width makes sense for you
+    (let ((split-width-threshold 160))  ; or whatever width makes sense for you
       ad-do-it))
   ;; (add-hook 'org-capture-mode-hook 'org-clock-out) ; Clock out of task when org-capture is run
   ;; (add-hook 'org-clock-out-hook 'spa/on-org-clock-out)
@@ -617,6 +618,15 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (org-mode . turn-on-font-lock)
   (org-mode . visual-line-mode)
   (org-agenda-mode . hl-line-mode)
+  ;; (org-mode . (lambda () 
+  ;; 		(defun org-html--format-image (source attributes info)
+  ;; 		  (format "<img src=\"data:image/%s;base64,%s\"%s />"
+  ;; 			  (or (file-name-extension source) "")
+  ;; 			  (base64-encode-string
+  ;; 			   (with-temp-buffer
+  ;; 			     (insert-file-contents-literally source)
+  ;; 			     (buffer-string)))
+  ;; 			  (file-name-nondirectory source)))))
   :bind (:map global-map
 	      ("C-c a" . org-agenda))
   (:map org-mode-map
@@ -886,13 +896,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
      `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
      `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
      `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-     `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-  (setq-default
-        ;; get only preview
-        company-frontends '(company-preview-frontend)
-        ;; also get a drop down
-        ;; company-frontends '(company-pseudo-tooltip-frontend company-preview-frontend)
-        ))
+     `(company-tooltip-common ((t (:inherit font-lock-constant-face)))))))
 
 ;; (use-package codeium
 ;;     :load-path (lambda () (xah-get-fullpath "lisp/codeium/"))
@@ -991,6 +995,11 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :pin melpa
   :init (require 'ess-site)
   :preface
+  ;; source: https://emacs.stackexchange.com/questions/73742/ess-starting-directory
+  (defun my-ess-startup-directory-function ()
+  "Force ESS to use `default-directory' as its startup directory."
+  default-directory)
+  (setq ess-startup-directory-function 'my-ess-startup-directory-function)
   (defun spa/ess-insert-pipe (arg)
     "Insert pipe '%>%' operator, add a newline and indent. With prefix arg, don't add newline" 
     (interactive "P")
