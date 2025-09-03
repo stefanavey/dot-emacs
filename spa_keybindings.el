@@ -5,31 +5,31 @@
 ;;;;;;;;;;;
 ;; Occur ;;
 ;;;;;;;;;;;
-(global-set-key (kbd "C-c C-o o") 'occur)
-(global-set-key (kbd "C-c C-o m") 'multi-occur-in-matching-buffers)
+(keymap-global-set "C-c C-o o" 'occur)
+(keymap-global-set "C-c C-o m" 'multi-occur-in-matching-buffers)
 
-(global-set-key "\C-\M-]" 'indent-region)
-(global-set-key (kbd "C-c m") 'man)
+(keymap-global-set "C-M-]" 'indent-region)
+(keymap-global-set "C-c m" 'man)
 
 ;; Insert Pair of quotes
 ;; Use M-1 M-" to wrap current word in quotes
-(global-set-key (kbd "M-\"") 'insert-pair)
+(keymap-global-set "M-\"" 'insert-pair)
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Custom Functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;
-(global-set-key (kbd "C-c A") 'spa/acro-search)
-(global-set-key (kbd "C-c n") 'spa/insert-common-name)
-(global-set-key "\C-cw" 'swap-quotes)
-(global-set-key (kbd "C-x p") 'copy-full-path-to-kill-ring)
-;; (global-set-key (kbd "C-c o") 'spa/open-finder)
-(global-set-key (kbd "C-c e") 'spa/wiki)
-(global-set-key (kbd "C-c b n") 'comment-box)
-(global-set-key (kbd "C-c b w") 'spa/comment-box)
-(global-set-key (kbd "C-c f") 'spa/plot-to-file-or-not)
-(global-set-key "\C-c\C-xs" 'just-one-space-in-region)
-(global-set-key (kbd "C-c L") 'org-toggle-latex-fragment)
-(global-set-key (kbd "C-c k") 'delete-this-buffer-and-file)
-(global-set-key (kbd "C-c t") 'transpose-buffers)
-;; (global-set-key (kbd "C-`") 'switch-to-previous-buffer)
+(keymap-global-set "C-c A" 'spa/acro-search)
+(keymap-global-set "C-c n" 'spa/insert-common-name)
+(keymap-global-set "C-cw" 'swap-quotes)
+(keymap-global-set "C-x p" 'copy-full-path-to-kill-ring)
+;; (keymap-global-set "C-c o" 'spa/open-finder)
+(keymap-global-set "C-c e" 'spa/wiki)
+(keymap-global-set "C-c b n" 'comment-box)
+(keymap-global-set "C-c b w" 'spa/comment-box)
+(keymap-global-set "C-c f" 'spa/plot-to-file-or-not)
+(keymap-global-set "C-c C-xs" 'just-one-space-in-region)
+(keymap-global-set "C-c L" 'org-toggle-latex-fragment)
+(keymap-global-set "C-c k" 'delete-this-buffer-and-file)
+(keymap-global-set "C-c t" 'transpose-buffers)
+;; (keymap-global-set "C-`" 'switch-to-previous-buffer)
 
