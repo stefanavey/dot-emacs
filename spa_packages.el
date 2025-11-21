@@ -1001,16 +1001,16 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   default-directory)
   (setq ess-startup-directory-function 'my-ess-startup-directory-function)
   (defun spa/ess-insert-pipe (arg)
-    "Insert pipe '%>%' operator, add a newline and indent. With prefix arg, don't add newline" 
+    "Insert pipe '|>' operator, add a newline and indent. With prefix arg, don't add newline" 
     (interactive "P")
     (if arg
 	(progn
 	  (just-one-space)
-	  (insert "%>%")
+	  (insert "|>")
 	  )
       (progn
 	(just-one-space)
-	(insert "%>%")
+	(insert "|>")
 	;; (ess-newline-and-indent))
 	(ess-roxy-newline-and-indent))))
   (defun spa/ess-insert-assign ()
@@ -1145,7 +1145,9 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
     "Find point position of end of line or beginning of pipe %>%."
     (if (search-forward "%>%" (line-end-position) t)
         (goto-char (match-beginning 0))
-      (end-of-line)))
+        (if (search-forward "|>" (line-end-position) t)
+            (goto-char (match-beginning 0))
+	  (end-of-line))))
   (defun spa/ess-eval-pipe-through-line (vis)
     "Like `ess-eval-paragraph' but only evaluates up to the pipe on this line.
 
