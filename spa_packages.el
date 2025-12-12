@@ -836,15 +836,30 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :config
   (global-undo-tree-mode))
 
+(use-package pos-tip
+  :ensure t
+  :config
+  (setq pos-tip-background-color (face-attribute 'default :background))
+  (setq pos-tip-foreground-color (face-attribute 'default :foreground)))
+
 (use-package flycheck
   :ensure t
   :init
-  (setq flycheck-lintr-linters "with_defaults(todo_comment_linter = NULL, trailing_blank_lines_linter = NULL, line_length_linter(80))")
+  ;; NOTE: This requires R package lintr to be installed
+  (setq flycheck-lintr-linters "lintr::linters_with_defaults(trailing_blank_lines_linter = NULL, line_length_linter(length = 80L), indentation_linter = NULL, object_name_linter(styles = c(\"snake_case\", \"symbols\", \"SNAKE_CASE\")))")
+  (setq flycheck-checker-error-threshold 1000)
   :hook ((elpy-mode ess-mode) . flycheck-mode)
   :commands
   (flycheck-mode
    flycheck-next-error
    flycheck-previous-error))
+
+(use-package flycheck-pos-tip
+  :ensure t
+  :pin melpa-stable
+  :init
+  (with-eval-after-load 'flycheck
+    (flycheck-pos-tip-mode)))
 
 (use-package template
   :load-path (lambda () (xah-get-fullpath "lisp/template/lisp/"))
@@ -897,6 +912,12 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
      `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
      `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
      `(company-tooltip-common ((t (:inherit font-lock-constant-face)))))))
+
+(use-package company-quickhelp
+  :ensure t
+  :config
+  ;; Time before display of documentation popup:
+  (setq company-quickhelp-delay 0.15))
 
 ;; (use-package codeium
 ;;     :load-path (lambda () (xah-get-fullpath "lisp/codeium/"))
@@ -1056,6 +1077,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq ess-eldoc-show-on-symbol nil) ; shows function arguments even if not in ()
   (setq ess-plain-first-buffername nil)
   (setq ess-tab-complete-in-script t)
+  (setq ess-default-style "RRR")
   ;; Modify the indentation style so that continued statements
   ;; like piping and adding operations only indent the first line
   ;; (add-to-list 'ess-style-alist
@@ -1104,6 +1126,8 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 	  (ess-fl-keyword:delimiters . t)
 	  (ess-fl-keyword:= . t)
 	  (ess-R-fl-keyword:F&T . t))))
+  ;; Get quick help with the auto-completion
+  (add-hook 'ess-mode-hook 'company-quickhelp-mode)
   ;; Toggle camel case / underscore / etc.
   (add-hook 'inferior-ess-mode-hook
             '(lambda ()
@@ -1133,13 +1157,14 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   ;; (add-hook 'inferior-ess-mode-hook
   ;; 	    (ess-execute "utils::rc.options(funarg.suffix = \" = \")"))
 
-  ;; Auto-completion using company
-  (setq ess-use-company nil) ; don't auto-insert ess backends so I can define it custom below
-  (defun comp-ess-config ()
-    (make-variable-buffer-local 'company-backends)
-    (add-to-list 'company-backends
-		 '(company-R-args company-R-objects company-dabbrev-code :separate)))
-  (add-hook 'ess-mode-hook #'comp-ess-config)
+  ;; Auto-completion using company in the script only (not inferior buffer)
+  (setq ess-use-company 'script-only)
+  ;; (setq ess-use-company nil) ; don't auto-insert ess backends so I can define it custom below
+  ;; (defun comp-ess-config ()
+  ;;   (make-variable-buffer-local 'company-backends)
+  ;;   (add-to-list 'company-backends
+  ;; 		 '(company-R-args company-R-objects company-dabbrev-code :separate)))
+  ;; (add-hook 'ess-mode-hook #'comp-ess-config)
   ;; From jabranham's Emacs init file
   (defun spa/ess-beginning-of-pipe-or-end-of-line ()
     "Find point position of end of line or beginning of pipe %>%."
@@ -1240,7 +1265,7 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
   (declare-function pm-map-over-spans "polymode-core")
   (declare-function pm-narrow-to-span "polymode-core")
   (defun spa/rmd-render (arg)
-    "Render the current Rmd file to first output format in YAML header.
+
 
 With a prefix arg, edit the R command in the minibuffer"
     (interactive "P")
@@ -1347,6 +1372,7 @@ With a prefix arg, edit the R command in the minibuffer"
     (add-hook 'elpy-mode-hook 'flycheck-mode))
   ;; Set the default shell interpreter to Jupyter for interactive Python
   (setq elpy-rpc-python-command "python3")
+  (setq elpy-rpc-virtualenv-path "current")
   ;; (setq elpy-shell-echo-output nil)
   (setq python-shell-interpreter "ipython")
   (setq python-shell-interpreter-args "--simple-prompt -c exec('__import__(\\'readline\\')') -i")
