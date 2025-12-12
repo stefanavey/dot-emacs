@@ -1267,7 +1267,7 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
   (defun spa/rmd-render (arg)
 
 
-With a prefix arg, edit the R command in the minibuffer"
+"With a prefix arg, edit the R command in the minibuffer"
     (interactive "P")
     ;; Find the first output type and use that
     (save-excursion
