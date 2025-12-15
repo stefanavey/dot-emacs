@@ -1390,7 +1390,7 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
   :vc (:url "https://github.com/copilot-emacs/copilot.el"
             :rev :newest
             :branch "main")
-  :hook (prog-mode . copilog-mode)
+  :hook (prog-mode . copilot-mode)
   :config
   (setq copilot-max-char 1000000)
   (add-to-list 'copilot-indentation-alist '(prog-mode 2))
