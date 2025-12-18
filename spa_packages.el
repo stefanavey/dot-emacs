@@ -916,21 +916,26 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq company-minimum-prefix-length 2) ; do idle completion with at least 2 characters
   (setq company-selection-wrap-around t) ; wrap around during selection
   :config
-  (add-hook 'after-init-hook 'global-company-mode)
-  ;; Customize company faces for dark background (ok for light background too)
-  (let ((bg (face-attribute 'default :background)))
-    (custom-set-faces
-     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
-     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-     `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-     `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-     `(company-tooltip-common ((t (:inherit font-lock-constant-face)))))))
+  (add-hook 'after-init-hook 'global-company-mode))
+  ;; ;; Customize company faces for dark background (ok for light background too)
+  ;; (let ((bg (face-attribute 'default :background)))
+  ;;   (custom-set-faces
+  ;;    `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
+  ;;    `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
+  ;;    `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
+  ;;    `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+  ;;    `(company-tooltip-common ((t (:inherit font-lock-constant-face)))))))
+
+(use-package company-box
+  :ensure t
+  :pin melpa
+  :hook (company-mode . company-box-mode))
 
 (use-package company-quickhelp
   :ensure t
   :config
   ;; Time before display of documentation popup:
-  (setq company-quickhelp-delay 0.15))
+  (setq company-quickhelp-delay 0.3))
 
 (use-package htmlize
   :ensure t
@@ -1042,7 +1047,6 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   (setq ess-eldoc-show-on-symbol nil) ; shows function arguments even if not in ()
   (setq ess-plain-first-buffername nil)
   (setq ess-tab-complete-in-script t)
-  (setq ess-default-style "RRR")
   ;; Modify the indentation style so that continued statements
   ;; like piping and adding operations only indent the first line
   ;; (add-to-list 'ess-style-alist
@@ -1407,10 +1411,17 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
   (add-to-list 'copilot-indentation-alist '(text-mode 2))
   (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))
   :bind (:map copilot-completion-map
-	      ("C-<tab>" . 'copilot-complete)
+	      ("C-<tab>" . 'copilot-complete) ; FIXME: Not getting bound to this key
 	      ("M-<tab>" . 'copilot-accept-completion)
 	      ("M-<down>" . 'copilot-next-completion)
 	      ("M-<up>" . 'copilot-previous-completion)))
+
+(use-package copilot-chat
+  :ensure t
+  :bind (:map global-map
+            ("C-c C-y" . copilot-chat-yank)
+            ("C-c M-y" . copilot-chat-yank-pop)
+            ("C-c C-M-y" . (lambda () (interactive) (copilot-chat-yank-pop -1)))))
 
 
 ;; (use-package codeium
