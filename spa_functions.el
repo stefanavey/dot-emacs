@@ -197,7 +197,7 @@ the highlighted region"
   (let ((e (copy-marker e t)))
     (goto-char b)
     (end-of-line)
-    (insert-char ?  (- fill-column (+ (current-column) (+ 3 (* arg 2)))))
+    (insert-char ?  (- fill-column (+ (current-column) (+ 4 (* arg 2)))))
     (comment-box b e arg)
     (goto-char e)
     (set-marker e nil)))
