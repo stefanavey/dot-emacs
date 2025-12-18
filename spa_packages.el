@@ -895,6 +895,19 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
   :bind (:map global-map
 	      ("C-c o" . reveal-in-osx-finder)))
 
+
+;; ;; Using company for autocompletion so don't need this anymore
+;; (use-package auto-complete
+;;   :defer 15
+;;   :diminish
+;;   :preface
+;;   (defun my-auto-hook ()
+;;     (auto-complete-mode 1)
+;;     (define-key ac-completing-map [return] nil)
+;;     (define-key ac-completing-map "\r" nil))
+;;   :hook
+;;   ((prog-mode ess-mode inferior-ess-mode) . (my-auto-hook)))
+
 (use-package company
   :ensure t
   :pin melpa-stable
@@ -1369,10 +1382,6 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
 ;;   :config
 ;;   (exwm-config-example))
 
-
-(use-package auto-complete
-  :ensure t
-  :pin melpa-stable)
 
 (use-package speed-type
   :ensure t

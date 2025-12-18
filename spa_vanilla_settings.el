@@ -47,7 +47,6 @@
   (setq default-abbrev-mode t))
 
 (use-package prog-mode
-  :after (auto-complete)
   :config
   (add-hook 'prog-mode-hook
             #'(lambda ()
@@ -208,7 +207,6 @@ Requires a password"
 
 (use-package flyspell
   :diminish (flyspell-mode . "φ")
-  :after auto-complete
   :defer t
   :preface
   ;; Flyspell signals an error if there is no spell-checking tool is
@@ -221,7 +219,6 @@ Requires a password"
   ((text-mode org-mode) . turn-on-flyspell)
   ((prog-mode) . flyspell-prog-mode)
   :config
-  (ac-flyspell-workaround)
   (advice-add 'turn-on-flyspell   :before-until #'modi/ispell-not-avail-p)
   (advice-add 'flyspell-prog-mode :before-until #'modi/ispell-not-avail-p))
 
@@ -241,17 +238,6 @@ Requires a password"
   (setq calendar-time-zone -300)
   (setq calendar-standard-time-zone-name "EST")
   (setq calendar-daylight-time-zone-name "EDT"))
-
-(use-package auto-complete
-  :defer 15
-  :diminish
-  :preface
-  (defun my-auto-hook ()
-    (auto-complete-mode 1)
-    (define-key ac-completing-map [return] nil)
-    (define-key ac-completing-map "\r" nil))
-  :hook
-  ((prog-mode ess-mode inferior-ess-mode) . (my-auto-hook)))
 
 (use-package subword-mode
   :diminish
