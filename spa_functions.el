@@ -443,3 +443,41 @@ the highlighted region"
 
 (define-key package-menu-mode-map "s" #'package-menu-filter-by-status)
 (define-key package-menu-mode-map "a" #'package-menu-find-marks)
+
+;; Convenience functions to insert placeholders for time tracking:
+;; Write a function that inserts all weeks of the year (starting as Mondays) in
+;; a string like "- Week of <YYYY-MM-DD>:" for each week of the current year and
+;; then calls spa-org-insert-weekdays() for each week to populate the weekdays
+;; below each week.
+(defun spa-org-insert-weeks-of-year ()
+  "Insert all weeks of the current year with weekdays as sub-bullets."
+  (interactive)
+  (let* ((current-year (string-to-number (format-time-string "%Y")))
+	 (start-date (org-read-date nil t (format "%d-01-01" current-year)))
+	 (end-date (org-read-date nil t (format "%d-12-31" current-year))))
+    ;; Move to the first Monday of the year
+    (while (not (eq (string-to-number (format-time-string "%u" start-date)) 1))
+      (setq start-date (time-add start-date (* 24 60 60))))
+    ;; Insert weeks and their weekdays
+    (while (time-less-p start-date end-date)
+      (insert (format "- Week of <%s>:\n" (format-time-string "%Y-%m-%d %a" start-date)))
+      (spa-org-insert-weekdays start-date)
+      (setq start-date (time-add start-date (* 7 24 60 60))))))
+
+;; Write an interactive elisp function that takes the org-mode formatted date at
+;; point and populates 5 sub-bullets below with the org-mode formatted date for
+;; only days of the week (Monday to Friday) for 1 week.
+;; Make sure that it moves the point to the next line before inserting the sub-bullets.
+(defun spa-org-insert-weekdays (&optional start-date)
+  "Insert weekdays (Monday to Friday) as sub-bullets below the start-date (if passed) or the org-mode date at point otherwise."
+  (interactive)
+  ;; If start-date was supplied, use that, otherwise, read date from point
+  (let* ((date (or start-date
+		   (org-read-date nil t (thing-at-point 'word)))))
+  ;; Insert weekdays
+  (dotimes (i 5)
+    (let ((weekday-date (time-add date (* i 24 60 60))))
+      (insert (format "  - %s: \n" (format-time-string "%m-%d %a" weekday-date)))))))
+
+
+

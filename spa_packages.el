@@ -788,6 +788,7 @@ source: `https://emacs.stackexchange.com/questions/21303/looking-for-a-better-wa
 	      ("C-o" . swiper-from-isearch)))
 
 (use-package projectile
+  :ensure t
   :diminish
   :init
   (setq projectile-project-search-path '("~/repos/"))
