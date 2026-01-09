@@ -459,10 +459,12 @@ the highlighted region"
     (while (not (eq (string-to-number (format-time-string "%u" start-date)) 1))
       (setq start-date (time-add start-date (* 24 60 60))))
     ;; Insert weeks and their weekdays
+    (org-insert-subheading t)
     (while (time-less-p start-date end-date)
-      (insert (format "- Week of <%s>:\n" (format-time-string "%Y-%m-%d %a" start-date)))
+      (insert (format "Week of [%s]:" (format-time-string "%Y-%m-%d %a" start-date)))
       (spa-org-insert-weekdays start-date)
-      (setq start-date (time-add start-date (* 7 24 60 60))))))
+      (setq start-date (time-add start-date (* 7 24 60 60)))
+      (org-insert-heading))))
 
 ;; Write an interactive elisp function that takes the org-mode formatted date at
 ;; point and populates 5 sub-bullets below with the org-mode formatted date for
@@ -474,10 +476,12 @@ the highlighted region"
   ;; If start-date was supplied, use that, otherwise, read date from point
   (let* ((date (or start-date
 		   (org-read-date nil t (thing-at-point 'word)))))
-  ;; Insert weekdays
-  (dotimes (i 5)
-    (let ((weekday-date (time-add date (* i 24 60 60))))
-      (insert (format "  - %s: \n" (format-time-string "%m-%d %a" weekday-date)))))))
+    (end-of-line)
+    (newline)
+    ;; Insert weekdays
+    (dotimes (i 5)
+      (let ((weekday-date (time-add date (* i 24 60 60))))
+	(insert (format "- %s: \n" (format-time-string "%m-%d %a" weekday-date)))))))
 
 
 
